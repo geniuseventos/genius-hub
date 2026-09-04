@@ -2,7 +2,6 @@
 // 1. MÁGICA DA ANIMAÇÃO (BLINDADA)
 // ==========================================
 function initReveal() {
-    // Seleciona apenas os elementos que ainda não estão ativos
     const reveals = document.querySelectorAll('.reveal:not(.active)');
     const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
@@ -15,8 +14,6 @@ function initReveal() {
 
     reveals.forEach(reveal => observer.observe(reveal));
 }
-
-// Aciona imediatamente para garantir que o layout estático apareça
 initReveal();
 
 // ==========================================
@@ -38,26 +35,36 @@ async function carregarProjetosDoBanco() {
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+        // Busca TUDO de uma vez (Soluções e Cases)
         const { data, error } = await supabase
             .from('portfolio')
-            .select('*')
-            .eq('tipo', 'solucao'); 
+            .select('*'); 
 
         if (error) throw error;
 
         if (data) {
-            projetos = data.map(item => ({
+            // Filtra as Soluções para a grade
+            projetos = data.filter(i => i.tipo === 'solucao').map(item => ({
                 id: item.id,
                 titulo: item.titulo,
                 categoria: item.categoria,
                 imagem: item.imagem,
                 link: `case-interno.html?item=${item.id}`
             }));
+
+            // Filtra os Cases para o carrossel
+            const casesHome = data.filter(i => i.tipo === 'projeto').map(item => ({
+                id: item.id,
+                titulo: item.titulo,
+                imagem: item.imagem,
+                link: `case-interno.html?projeto=${item.id}`
+            }));
+
+            renderizarCases(casesHome);
         }
     } catch (erro) {
         console.error("Erro ao conectar no banco:", erro);
     } finally {
-        // Renderiza mesmo em caso de erro para destravar o layout
         renderizarProjetos('todos'); 
     }
 }
@@ -99,8 +106,32 @@ function renderizarProjetos(filtroAtual) {
         gridContainer.appendChild(card);
     });
 
-    // Chama o initReveal de novo para aplicar a animação aos novos cards
     setTimeout(initReveal, 50);
+}
+
+// Injeta os cases no carrossel
+function renderizarCases(cases) {
+    const track = document.getElementById('cases-track');
+    if (!track) return;
+    
+    track.innerHTML = '';
+
+    if (cases.length === 0) {
+        track.innerHTML = '<div style="padding: 20px; color: #555; text-align: center; width: 100%;">Nenhum projeto cadastrado no banco ainda.</div>';
+        return;
+    }
+
+    cases.forEach((projeto, index) => {
+        const a = document.createElement('a');
+        a.href = projeto.link;
+        a.className = 'case-card'; 
+        a.style.backgroundImage = `url('${projeto.imagem}')`;
+        a.innerHTML = `<h3>${projeto.titulo}</h3>`;
+        track.appendChild(a);
+    });
+
+    // Inicia a mecânica do carrossel após inserir os itens na tela
+    initCarousel();
 }
 
 filtros.forEach(btn => {
@@ -161,51 +192,53 @@ window.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 // 4. LÓGICA DO CARROSSEL ANIMADO
 // ==========================================
-const track = document.getElementById('cases-track');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
+function initCarousel() {
+    const track = document.getElementById('cases-track');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
 
-if (track && prevBtn && nextBtn) {
-    const cardsArray = Array.from(track.children);
-    cardsArray.forEach(card => {
-        const clone = card.cloneNode(true);
-        track.appendChild(clone);
-    });
+    // Só inicia o clone se tiver mais de um item, para evitar bugs em tela vazia
+    if (track && prevBtn && nextBtn && track.children.length > 0) {
+        const cardsArray = Array.from(track.children);
+        cardsArray.forEach(card => {
+            const clone = card.cloneNode(true);
+            track.appendChild(clone);
+        });
 
-    const getScrollAmount = () => {
-        const cardElement = track.querySelector('.case-card');
-        if(!cardElement) return 300;
-        return cardElement.offsetWidth + 30; 
-    };
+        const getScrollAmount = () => {
+            const cardElement = track.querySelector('.case-card');
+            if(!cardElement) return 300;
+            return cardElement.offsetWidth + 30; 
+        };
 
-    nextBtn.addEventListener('click', () => {
-        track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-    });
-
-    prevBtn.addEventListener('click', () => {
-        track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-    });
-
-    let autoplayInterval = setInterval(autoScroll, 3000);
-
-    function autoScroll() {
-        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
-            track.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
+        nextBtn.addEventListener('click', () => {
             track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-        }
-    }
+        });
 
-    track.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-    track.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(autoScroll, 3000);
-    });
+        prevBtn.addEventListener('click', () => {
+            track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        let autoplayInterval = setInterval(autoScroll, 3000);
+
+        function autoScroll() {
+            if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
+                track.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+            }
+        }
+
+        track.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        track.addEventListener('mouseleave', () => {
+            autoplayInterval = setInterval(autoScroll, 3000);
+        });
+    }
 }
 
 // ==========================================
 // 5. INTERAÇÕES E EFEITOS VISUAIS
 // ==========================================
-// Parallax das Estrelas
 const sectionsDark = document.querySelectorAll('.section-dark');
 const moverEstrelas = (e) => {
     let clientX = e.clientX || (e.touches && e.touches[0].clientX);
