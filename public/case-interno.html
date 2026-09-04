@@ -33,26 +33,26 @@
             
             <div class="case-grid">
                 <!-- Imagem do Projeto -->
-                <div class="case-imagem">
-                    <img id="case-img" src="" alt="Imagem do Projeto" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <div class="case-imagem reveal delay-1">
+                    <img id="case-img" src="" alt="Imagem do Projeto" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none;">
                 </div>
                 
                 <!-- Informações do Projeto -->
-                <div class="case-info">
+                <div class="case-info reveal delay-2">
                     <h2 id="case-titulo" style="font-size: 2.5rem; margin-bottom: 20px; text-transform: uppercase;">Carregando...</h2>
                     <p id="case-desc" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;"></p>
                     
-                    <h3 style="margin-bottom: 15px;">Ideal para:</h3>
+                    <h3 style="margin-bottom: 15px;" id="case-tag-title" style="display: none;">Ideal para:</h3>
                     <ul id="case-tags" style="list-style: none; display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px;">
                         <!-- Tags inseridas via JS -->
                     </ul>
 
-                    <a href="index.html#contato" class="btn-dark">Solicitar Orçamento</a>
+                    <a href="#" target="_blank" class="btn-dark" id="case-btn" style="display: none;">Solicitar Orçamento</a>
                 </div>
             </div>
 
             <!-- Botão Voltar no final da seção, alinhado à direita. -->
-            <div style="text-align: right; margin-top: 60px;">
+            <div style="text-align: right; margin-top: 60px;" class="reveal delay-3">
                 <a href="javascript:history.back()" class="btn-primary">← Voltar</a>
             </div>
 
@@ -66,7 +66,102 @@
         </svg>
     </a>
 
+    <!-- Módulo Supabase e Script da Página -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="case.js"></script>
+    
+    <script>
+        // Lógica de Entrada Visual (Reveal)
+        function initReveal() {
+            const reveals = document.querySelectorAll('.reveal:not(.active)');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        obs.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+            reveals.forEach(reveal => observer.observe(reveal));
+        }
+        initReveal();
+
+        // 1. Configura Supabase com a variável correta
+        const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 2. Extrai o ID da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('item'); 
+        const projetoId = urlParams.get('projeto'); 
+        const idBuscado = itemId || projetoId;
+
+        // 3. Busca e Injeta Dados
+        async function carregarDetalhes() {
+            if (!idBuscado) {
+                mostrarErro();
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('portfolio')
+                    .select('*')
+                    .eq('id', idBuscado)
+                    .single(); 
+
+                if (error || !data) {
+                    mostrarErro();
+                    console.error("Erro ao buscar detalhes:", error);
+                    return;
+                }
+
+                // Preenche a tela com os dados
+                document.getElementById('case-titulo').innerText = data.titulo;
+                document.getElementById('case-desc').innerText = data.descricao;
+                
+                const imgElement = document.getElementById('case-img');
+                imgElement.src = data.imagem;
+                imgElement.alt = data.titulo;
+                imgElement.style.display = 'block';
+
+                // Preenche as tags
+                const tagsContainer = document.getElementById('case-tags');
+                tagsContainer.innerHTML = ''; 
+                if (data.tags && Array.isArray(data.tags)) {
+                    data.tags.forEach(tag => {
+                        const li = document.createElement('li');
+                        li.className = 'tag';
+                        li.innerText = tag;
+                        tagsContainer.appendChild(li);
+                    });
+                    document.getElementById('case-tag-title').style.display = 'block';
+                }
+
+                // Exibe o botão de orçamento e configura o link do WhatsApp com o nome do projeto
+                const btnOrcamento = document.getElementById('case-btn');
+                const mensagem = `Olá! Gostaria de solicitar um orçamento para o projeto: ${data.titulo}.`;
+                btnOrcamento.href = `https://wa.me/5583920036455?text=${encodeURIComponent(mensagem)}`;
+                btnOrcamento.style.display = 'inline-block';
+                
+            } catch (erro) {
+                mostrarErro();
+                console.error("Erro de execução:", erro);
+            }
+        }
+
+        // Função de Erro
+        function mostrarErro() {
+            document.getElementById('case-titulo').innerText = "Conteúdo não encontrado";
+            document.getElementById('case-desc').innerText = "O projeto ou solução que você procura não está disponível ou o link está incorreto.";
+            document.getElementById('case-img').style.display = 'none';
+            document.getElementById('case-tags').innerHTML = '';
+            document.getElementById('case-tag-title').style.display = 'none';
+            document.getElementById('case-btn').style.display = 'none';
+        }
+
+        carregarDetalhes();
+    </script>
 </body>
 </html>
