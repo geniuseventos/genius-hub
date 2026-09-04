@@ -1,0 +1,106 @@
+// Inicialização do Supabase
+const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let todosCases = [];
+const casesPorPagina = 6;
+let paginaAtual = 1;
+
+const grid = document.getElementById('todos-cases-grid');
+const pagination = document.getElementById('pagination-controls');
+
+async function carregarTodosCases() {
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Carregando projetos...</div>';
+    
+    // Busca tudo do banco (tanto soluções quanto projetos de marca)
+    const { data, error } = await supabase
+        .from('portfolio')
+        .select('*');
+        
+    if (error) {
+        console.error("Erro ao buscar cases:", error);
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: red;">Erro ao carregar o portfólio.</div>';
+        return;
+    }
+
+    // Formata o link dependendo do tipo cadastrado no banco
+    todosCases = data.map(item => {
+        let linkInterno = item.tipo === 'solucao' 
+            ? `case-interno.html?item=${item.id}` 
+            : `case-interno.html?projeto=${item.id}`;
+            
+        return {
+            id: item.id,
+            titulo: item.titulo,
+            imagem: item.imagem,
+            link: linkInterno
+        };
+    });
+
+    renderizarPagina(1);
+}
+
+function renderizarPagina(pagina) {
+    paginaAtual = pagina;
+    grid.innerHTML = '';
+    
+    const indexInicio = (pagina - 1) * casesPorPagina;
+    const indexFim = indexInicio + casesPorPagina;
+    const casesParaMostrar = todosCases.slice(indexInicio, indexFim);
+
+    if (casesParaMostrar.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Nenhum projeto encontrado.</div>';
+        pagination.innerHTML = '';
+        return;
+    }
+
+    casesParaMostrar.forEach((projeto, index) => {
+        const a = document.createElement('a');
+        a.href = projeto.link;
+        a.className = 'case-card reveal active'; // Já entra com opacidade
+        a.style.backgroundImage = `url('${projeto.imagem}')`;
+        a.style.animationDelay = `${index * 0.1}s`;
+        
+        a.innerHTML = `<h3>${projeto.titulo}</h3>`;
+        grid.appendChild(a);
+    });
+
+    renderizarControlesPaginacao();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderizarControlesPaginacao() {
+    pagination.innerHTML = '';
+    const totalPaginas = Math.ceil(todosCases.length / casesPorPagina);
+
+    if (totalPaginas <= 1) return;
+
+    // Botão Anterior
+    const btnPrev = document.createElement('button');
+    btnPrev.className = 'page-btn';
+    btnPrev.innerText = '←';
+    btnPrev.disabled = paginaAtual === 1;
+    btnPrev.addEventListener('click', () => renderizarPagina(paginaAtual - 1));
+    pagination.appendChild(btnPrev);
+
+    // Botões de Número
+    for (let i = 1; i <= totalPaginas; i++) {
+        const btnNum = document.createElement('button');
+        btnNum.className = `page-btn ${paginaAtual === i ? 'active' : ''}`;
+        btnNum.innerText = i;
+        btnNum.addEventListener('click', () => renderizarPagina(i));
+        pagination.appendChild(btnNum);
+    }
+
+    // Botão Próximo
+    const btnNext = document.createElement('button');
+    btnNext.className = 'page-btn';
+    btnNext.innerText = '→';
+    btnNext.disabled = paginaAtual === totalPaginas;
+    btnNext.addEventListener('click', () => renderizarPagina(paginaAtual + 1));
+    pagination.appendChild(btnNext);
+}
+
+// Inicia a renderização
+carregarTodosCases();

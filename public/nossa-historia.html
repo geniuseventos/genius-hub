@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossa História | Genius Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <header class="navbar" id="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/logog.png" alt="Genius Hub" class="logo-img">
+            </a>
+        </div>
+        
+        <nav class="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html#home" class="nav-item">Home</a></li>
+                <li><a href="index.html#solucoes" class="nav-item">Soluções</a></li>
+                <li><a href="index.html#cases" class="nav-item">Cases</a></li>
+                <li><a href="index.html#quem-somos" class="nav-item active">Quem Somos</a></li>
+            </ul>
+        </nav>
+        
+        <div class="header-spacer"></div>
+    </header>
+
+    <!-- CABEÇALHO DA PÁGINA (HERO) -->
+    <!-- Padding inferior ajustado para 180px para o texto não ser engolido pela curva -->
+    <section class="hero section-light" style="padding: 180px 0 180px 0; text-align: center;">
+        <div class="container reveal">
+            <h2 style="font-size: 3.5rem; text-transform: uppercase; margin-bottom: 20px;">A JORNADA</h2>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; color: var(--text-dark);">
+                Dos bastidores dos eventos para a mudança na forma de interagir com o público.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL (HISTÓRIA PESSOAL E DIRETA) -->
+    <section class="section-dark" style="padding: 180px 0 120px 0; margin-top: -120px; clip-path: ellipse(200% 100% at 50% 100%); position: relative; z-index: 2;">
+        <div class="container reveal delay-1">
+            
+            <div style="max-width: 800px; margin: 0 auto; color: #ccc; font-size: 1.15rem; line-height: 1.8;">
+                
+                <p style="margin-bottom: 30px;">
+                    A Genius Hub começou a tomar forma nos corredores da <strong>Universidade Estadual da Paraíba (UEPB)</strong>. Como estudante de programação, eu passava as madrugadas escrevendo linhas de código, sempre tentando entender como a tecnologia poderia resolver problemas reais e não apenas ficar restrita às telas dos computadores.
+                </p>
+
+                <p style="margin-bottom: 30px;">
+                    A resposta veio do meu trabalho paralelo. Para conseguir uma renda extra, atuei muito tempo como freelancer na produção de eventos, shows e congressos. Estando ali, nos bastidores, eu via estruturas imensas serem montadas. Mas algo sempre me incomodava: o público quase sempre assumia um papel passivo. As pessoas estavam lá apenas para olhar, sem realmente interagir com o que estava acontecendo ao redor.
+                </p>
+
+                <blockquote style="border-left: 4px solid var(--text-light); padding-left: 25px; font-size: 1.4rem; margin: 50px 0; color: white; font-style: italic; font-weight: 700;">
+                    "Eu percebi que a programação poderia mudar essa dinâmica. Se eu usasse o que estava aprendendo na faculdade para criar ferramentas interativas, o público deixaria de ser apenas um espectador e passaria a fazer parte do evento."
+                </blockquote>
+
+                <p style="margin-bottom: 30px;">
+                    Foi dessa vontade de fazer diferente que a empresa nasceu. Eu não queria mais desenvolver apenas sistemas que as pessoas olham de longe. A ideia era criar soluções onde o público pudesse tocar, jogar e participar ativamente do momento.
+                </p>
+
+                <p style="margin-bottom: 50px;">
+                    Hoje, a Genius Hub é o resultado direto dessa inquietação. O que começou como a observação de um freelancer nos bastidores se transformou em uma empresa focada em mudar, na prática, a forma como as pessoas vivenciam os eventos. E este é só o começo.
+                </p>
+
+                <!-- ASSINATURA -->
+                <div style="display: flex; align-items: center; gap: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; margin-top: 40px;">
+                    <img src="assets/img/fotoeverton.jpg" alt="Éverton José da Costa" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--text-light);">
+                    <div>
+                        <h4 style="font-size: 1.5rem; font-weight: 900; color: var(--text-light); text-transform: uppercase; margin-bottom: 5px;">Éverton José da Costa</h4>
+                        <span style="color: #a0a0a0; font-family: var(--font-code); font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;">Fundador e CEO</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- BOTÃO VOLTAR -->
+            <div style="text-align: center; margin-top: 80px;">
+                <a href="index.html" class="btn-primary">Voltar para a Página Inicial</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BOTÃO WHATSAPP FIXO -->
+    <a href="https://wa.me/5583999999999?text=Olá! Gostaria de falar sobre um projeto interativo." target="_blank" class="whatsapp-float" aria-label="Fale conosco pelo WhatsApp">
+        <svg viewBox="0 0 448 512" width="32" height="32" fill="white">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 413.6c-33.6 0-66.5-9-95.4-26l-6.8-4-71 18.6 18.9-69.2-4.4-7C45.2 291 33 258 33 223.9 33 118.7 118.7 33 223.9 33c51 0 98.9 19.9 134.9 55.9s55.9 83.9 55.9 134.9c0 105.2-85.7 190.9-190.8 190.8zm103.8-142.3c-5.7-2.8-33.8-16.7-39-18.6-5.2-1.9-9-2.8-12.8 2.8-3.8 5.7-14.7 18.6-18 22.4-3.3 3.8-6.6 4.3-12.3 1.4-5.7-2.8-24.1-8.9-45.9-28.3-17-15.1-28.5-33.8-31.8-39.5-3.3-5.7-.4-8.8 2.5-11.6 2.6-2.6 5.7-6.6 8.5-9.9 2.8-3.3 3.8-5.7 5.7-9.5 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.9-17.6-42.3-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-10 1.4-15.2 7.1-5.2 5.7-19.9 19.4-19.9 47.4 0 28 20.4 55.1 23.2 58.8 2.8 3.8 40 61.1 96.9 85.7 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.8-13.8 38.6-27.1 4.7-13.3 4.7-24.6 3.3-27.1-1.4-2.6-5.2-4.1-10.9-6.9z"/>
+        </svg>
+    </a>
+
+    <script src="main.js"></script>
+</body>
+</html>
