@@ -1,7 +1,9 @@
 // Inicialização do Supabase
 const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// Mudamos de "supabase" para "supabaseClient" para não conflitar com a biblioteca
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('adminForm');
@@ -9,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const tipoSelect = document.getElementById('tipoItem');
     const categoriaGroup = document.getElementById('itemCategoria').parentElement;
 
-    // Mostra/Esconde Categoria dependendo do tipo
     tipoSelect.addEventListener('change', (e) => {
         categoriaGroup.style.display = e.target.value === 'solucao' ? 'flex' : 'none';
     });
@@ -17,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function carregarItens() {
         listaItens.innerHTML = '<li>Carregando itens do banco de dados...</li>';
         
-        const { data, error } = await supabase
+        // Usamos supabaseClient a partir de agora
+        const { data, error } = await supabaseClient
             .from('portfolio')
             .select('id, titulo, tipo')
             .order('titulo', { ascending: true }); 
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('btn-delete')) {
             const id = e.target.getAttribute('data-id');
             if (confirm(`Deletar definitivamente "${id}"?`)) {
-                await supabase.from('portfolio').delete().eq('id', id);
+                await supabaseClient.from('portfolio').delete().eq('id', id);
                 carregarItens();
             }
         }
@@ -65,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let idRaw = document.getElementById('itemId').value.trim().toLowerCase();
         idRaw = idRaw.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9-]/g, '-'); 
 
-        // 1. Upload de Imagem para o Storage
         const fileInput = document.getElementById('itemImagem');
         const file = fileInput.files[0];
         let imagemPublicUrl = '';
@@ -74,8 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const fileExt = file.name.split('.').pop();
             const fileName = `${idRaw}-${Math.random().toString(36).substring(2)}.${fileExt}`;
 
-            // Envia o arquivo para o bucket "imagens"
-            const { data: uploadData, error: uploadError } = await supabase.storage
+            // Upload de Imagem com o supabaseClient
+            const { data: uploadData, error: uploadError } = await supabaseClient.storage
                 .from('imagens')
                 .upload(fileName, file);
 
@@ -87,15 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Pega a URL pública do arquivo recém upado
-            const { data: publicUrlData } = supabase.storage
+            const { data: publicUrlData } = supabaseClient.storage
                 .from('imagens')
                 .getPublicUrl(fileName);
 
             imagemPublicUrl = publicUrlData.publicUrl;
         }
 
-        // 2. Salvar Dados no Banco
         btnSubmit.innerText = "Salvando dados...";
 
         const novoItem = {
@@ -111,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
             novoItem.categoria = document.getElementById('itemCategoria').value;
         }
 
-        const { error } = await supabase.from('portfolio').insert([novoItem]);
+        // Salva os dados na tabela com supabaseClient
+        const { error } = await supabaseClient.from('portfolio').insert([novoItem]);
 
         if (error) {
             alert('Erro ao salvar. ID já existe?');
