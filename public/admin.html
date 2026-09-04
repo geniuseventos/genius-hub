@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos específicos para o Admin */
         .admin-container {
             max-width: 800px;
             margin: 40px auto;
@@ -41,6 +40,10 @@
             border-radius: 8px;
             font-family: var(--font-main);
             font-size: 1rem;
+        }
+        .form-group input[type="file"] {
+            padding: 8px;
+            background: #f9f9f9;
         }
         .form-group textarea {
             resize: vertical;
@@ -125,9 +128,10 @@
                     </select>
                 </div>
 
+                <!-- CAMPO ATUALIZADO: UPLOAD DE ARQUIVO -->
                 <div class="form-group">
-                    <label for="itemImagem">Caminho da Imagem (ex: assets/img/foto.jpg)</label>
-                    <input type="text" id="itemImagem" required value="assets/img/placeholder.jpg">
+                    <label for="itemImagem">Imagem (Selecione do computador)</label>
+                    <input type="file" id="itemImagem" accept="image/*" required>
                 </div>
 
                 <div class="form-group">
