@@ -421,12 +421,12 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
 }
 
 /* ========================================= */
-/* FOOTER (RODAPÉ)                           */
+/* FOOTER (RODAPÉ CLARO COM ALTO CONTRASTE)  */
 /* ========================================= */
 .footer {
     position: relative;
     z-index: 10;
-    border-top: 1px solid rgba(255, 255, 255, 0.05); 
+    border-top: 1px solid rgba(0, 0, 0, 0.05); 
 }
 
 .footer-grid {
@@ -439,17 +439,19 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
 .footer-logo {
     max-height: 45px;
     margin-bottom: 20px;
+    /* Essa linha mágica deixa a sua logo branca atual 100% PRETA */
+    filter: brightness(0); 
 }
 
 .footer-brand p {
-    color: #a0a0a0;
+    color: #444444; /* Cinza bem escuro, perfeito para ler no branco */
     font-size: 0.95rem;
     line-height: 1.6;
     max-width: 400px;
 }
 
 .footer h3 {
-    color: var(--text-light);
+    color: var(--text-dark); /* Preto forte */
     font-size: 1.1rem;
     margin-bottom: 20px;
     font-family: var(--font-code);
@@ -466,24 +468,25 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
 }
 
 .footer-links a, .footer-contact a {
-    color: #a0a0a0;
+    color: #555555;
     text-decoration: none;
     transition: color 0.3s ease;
     font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .footer-links a:hover, .footer-contact a:hover {
-    color: var(--text-light);
+    color: var(--text-dark); /* Preto forte no hover */
 }
 
 .footer-contact span {
     font-weight: 700;
-    color: #ccc;
+    color: var(--text-dark);
     margin-right: 5px;
 }
 
 .footer-contact li {
-    color: #a0a0a0;
+    color: #555555;
     font-size: 0.95rem;
 }
 
@@ -492,9 +495,10 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
     justify-content: space-between;
     align-items: center;
     padding: 30px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #777;
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Linha divisória fina e escura */
+    color: #666666;
     font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .social-icons {
@@ -503,12 +507,12 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
 }
 
 .social-icons a {
-    color: #777;
+    color: #666666;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .social-icons a:hover {
-    color: var(--text-light);
+    color: var(--text-dark);
     transform: translateY(-3px);
 }
 

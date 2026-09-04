@@ -1,69 +1,69 @@
-// Inicialização do Supabase
-const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+// ==========================================
+// 1. MÁGICA DA ANIMAÇÃO (BLINDADA)
+// ==========================================
+function initReveal() {
+    // Seleciona apenas os elementos que ainda não estão ativos
+    const reveals = document.querySelectorAll('.reveal:not(.active)');
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                obs.unobserve(entry.target); 
+            }
+        });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
+    reveals.forEach(reveal => observer.observe(reveal));
+}
+
+// Aciona imediatamente para garantir que o layout estático apareça
+initReveal();
+
+// ==========================================
+// 2. SUPABASE E RENDERIZAÇÃO
+// ==========================================
 let projetos = []; 
 const gridContainer = document.getElementById('portfolio-grid');
 const filtros = document.querySelectorAll('#filtros-menu li');
 
-// Função para buscar dados no Supabase (Apenas Soluções para a grade)
 async function carregarProjetosDoBanco() {
-    const { data, error } = await supabase
-        .from('portfolio')
-        .select('*')
-        .eq('tipo', 'solucao'); 
-
-    if (error) {
-        console.error("Erro ao buscar dados:", error);
+    if (!window.supabase) {
+        console.error("Script do Supabase não carregou.");
+        renderizarProjetos('todos');
         return;
     }
 
-    // Formata os dados para o padrão que a grade espera
-    if(data) {
-        projetos = data.map(item => ({
-            id: item.id,
-            titulo: item.titulo,
-            categoria: item.categoria,
-            imagem: item.imagem,
-            link: `case-interno.html?item=${item.id}`
-        }));
-    }
+    try {
+        const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    renderizarProjetos('todos'); 
+        const { data, error } = await supabase
+            .from('portfolio')
+            .select('*')
+            .eq('tipo', 'solucao'); 
+
+        if (error) throw error;
+
+        if (data) {
+            projetos = data.map(item => ({
+                id: item.id,
+                titulo: item.titulo,
+                categoria: item.categoria,
+                imagem: item.imagem,
+                link: `case-interno.html?item=${item.id}`
+            }));
+        }
+    } catch (erro) {
+        console.error("Erro ao conectar no banco:", erro);
+    } finally {
+        // Renderiza mesmo em caso de erro para destravar o layout
+        renderizarProjetos('todos'); 
+    }
 }
 
-// Chama a função assim que carregar
 carregarProjetosDoBanco();
 
-// ==========================================
-// SCROLL REVEAL OBSERVER (Mágica da Animação)
-// ==========================================
-let revealObserver;
-
-function initReveal() {
-    const reveals = document.querySelectorAll('.reveal');
-    
-    if (!revealObserver) {
-        revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); 
-                }
-            });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-    }
-
-    reveals.forEach(reveal => revealObserver.observe(reveal));
-}
-
-document.addEventListener('DOMContentLoaded', initReveal);
-
-
-// ==========================================
-// RENDERIZAÇÃO E FILTROS DE SOLUÇÕES
-// ==========================================
 function renderizarProjetos(filtroAtual) {
     if (!gridContainer) return;
     gridContainer.innerHTML = ''; 
@@ -99,6 +99,7 @@ function renderizarProjetos(filtroAtual) {
         gridContainer.appendChild(card);
     });
 
+    // Chama o initReveal de novo para aplicar a animação aos novos cards
     setTimeout(initReveal, 50);
 }
 
@@ -112,7 +113,7 @@ filtros.forEach(btn => {
 });
 
 // ==========================================
-// EFEITOS DE SCROLL NO HEADER
+// 3. EFEITOS DE SCROLL NO HEADER E MEMÓRIA
 // ==========================================
 const navbar = document.getElementById('navbar');
 const sections = document.querySelectorAll('section');
@@ -143,15 +144,28 @@ window.addEventListener('scroll', () => {
     });
 });
 
+window.addEventListener('beforeunload', () => {
+    sessionStorage.setItem('scrollPosition', window.scrollY);
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    const savedScroll = sessionStorage.getItem('scrollPosition');
+    if (savedScroll) {
+        setTimeout(() => {
+            window.scrollTo({ top: parseInt(savedScroll), behavior: 'auto' });
+        }, 100);
+        sessionStorage.removeItem('scrollPosition'); 
+    }
+});
+
 // ==========================================
-// LÓGICA DO CARROSSEL ANIMADO E INFINITO
+// 4. LÓGICA DO CARROSSEL ANIMADO
 // ==========================================
 const track = document.getElementById('cases-track');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
 if (track && prevBtn && nextBtn) {
-    
     const cardsArray = Array.from(track.children);
     cardsArray.forEach(card => {
         const clone = card.cloneNode(true);
@@ -159,8 +173,9 @@ if (track && prevBtn && nextBtn) {
     });
 
     const getScrollAmount = () => {
-        const cardWidth = track.querySelector('.case-card').offsetWidth;
-        return cardWidth + 30; 
+        const cardElement = track.querySelector('.case-card');
+        if(!cardElement) return 300;
+        return cardElement.offsetWidth + 30; 
     };
 
     nextBtn.addEventListener('click', () => {
@@ -182,189 +197,130 @@ if (track && prevBtn && nextBtn) {
     }
 
     track.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-    
     track.addEventListener('mouseleave', () => {
         autoplayInterval = setInterval(autoScroll, 3000);
     });
 }
 
 // ==========================================
-// MEMÓRIA DE ROLAGEM
+// 5. INTERAÇÕES E EFEITOS VISUAIS
 // ==========================================
-window.addEventListener('beforeunload', () => {
-    sessionStorage.setItem('scrollPosition', window.scrollY);
-});
+// Parallax das Estrelas
+const sectionsDark = document.querySelectorAll('.section-dark');
+const moverEstrelas = (e) => {
+    let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    if (clientX === undefined || clientY === undefined) return;
 
-window.addEventListener('DOMContentLoaded', () => {
-    const savedScroll = sessionStorage.getItem('scrollPosition');
-    
-    if (savedScroll) {
-        setTimeout(() => {
-            window.scrollTo({ top: parseInt(savedScroll), behavior: 'auto' });
-        }, 100);
-        
-        sessionStorage.removeItem('scrollPosition'); 
+    const x = (clientX / window.innerWidth - 0.5) * 2;
+    const y = (clientY / window.innerHeight - 0.5) * 2;
+
+    sectionsDark.forEach(section => {
+        section.style.setProperty('--x', `${x * 30}px`);
+        section.style.setProperty('--y', `${y * 30}px`);
+    });
+};
+document.addEventListener('mousemove', moverEstrelas);
+document.addEventListener('touchmove', moverEstrelas, { passive: true });
+
+// Máquina de escrever - Home
+const heroElement = document.getElementById('hero-typewriter');
+const heroCursor = document.querySelector('.hero-cursor');
+if (heroElement) {
+    const textoHero = "MUDE A FORMA DE INTERAGIR COM O SEU PÚBLICO.";
+    let i = 0;
+    function digitarHero() {
+        if (i < textoHero.length) {
+            heroElement.textContent += textoHero.charAt(i);
+            i++;
+            setTimeout(digitarHero, 50);
+        } else if (heroCursor) {
+            heroCursor.style.animation = "blinkTextCursor 0.8s infinite normal";
+        }
     }
-});
+    setTimeout(digitarHero, 600);
+}
 
-// ==========================================
-// EFEITO PARALLAX DO MOUSE NAS ESTRELAS
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const sectionsDark = document.querySelectorAll('.section-dark');
+// Máquina de escrever - Quem Somos
+const typewriterElement = document.getElementById('typewriter-text');
+if (typewriterElement) {
+    const palavras = ["QUEM SOMOS", "NOSSA HISTÓRIA", "SOMOS A GENIUS HUB", "CÓDIGO E IMERSÃO"];
+    let palavraIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
 
-    const moverEstrelas = (e) => {
-        let clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    function typeWriter() {
+        const currentPalavra = palavras[palavraIndex];
         
-        if (clientX === undefined || clientY === undefined) return;
+        if (isDeleting) {
+            typewriterElement.textContent = currentPalavra.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typewriterElement.textContent = currentPalavra.substring(0, charIndex + 1);
+            charIndex++;
+        }
 
-        const x = (clientX / window.innerWidth - 0.5) * 2;
-        const y = (clientY / window.innerHeight - 0.5) * 2;
+        let typeSpeed = isDeleting ? 50 : 100;
 
-        sectionsDark.forEach(section => {
-            section.style.setProperty('--x', `${x * 30}px`);
-            section.style.setProperty('--y', `${y * 30}px`);
-        });
+        if (!isDeleting && charIndex === currentPalavra.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            palavraIndex = (palavraIndex + 1) % palavras.length;
+            typeSpeed = 500;
+        }
+        setTimeout(typeWriter, typeSpeed);
+    }
+    setTimeout(typeWriter, 1000);
+}
+
+// Título Fujão ("NOSSOS PROJETOS")
+const tituloFujao = document.getElementById('titulo-fujao');
+if (tituloFujao) {
+    const fugir = () => {
+        const moveX = (Math.random() - 0.5) * 400; 
+        const moveY = (Math.random() - 0.5) * 150;
+        const rotacao = (Math.random() - 0.5) * 15;
+        
+        tituloFujao.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1) rotate(${rotacao}deg)`;
+        tituloFujao.style.color = "var(--btn-dark)";
     };
+    tituloFujao.addEventListener('mouseenter', fugir);
+    tituloFujao.addEventListener('touchstart', fugir, { passive: true });
 
-    document.addEventListener('mousemove', moverEstrelas);
-    document.addEventListener('touchmove', moverEstrelas, { passive: true });
-});
-
-// ==========================================
-// EFEITO DE TERMINAL (TÍTULO DA HOME)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const heroElement = document.getElementById('hero-typewriter');
-    const heroCursor = document.querySelector('.hero-cursor');
-    
-    if (heroElement) {
-        const textoHero = "MUDE A FORMA DE INTERAGIR COM O SEU PÚBLICO.";
-        let i = 0;
-        
-        function digitarHero() {
-            if (i < textoHero.length) {
-                heroElement.textContent += textoHero.charAt(i);
-                i++;
-                setTimeout(digitarHero, 50);
-            } else {
-                if (heroCursor) {
-                    heroCursor.style.animation = "blinkTextCursor 0.8s infinite normal";
-                }
-            }
-        }
-
-        setTimeout(digitarHero, 600);
+    const casesSection = document.getElementById('cases');
+    if (casesSection) {
+        casesSection.addEventListener('mouseleave', () => {
+            tituloFujao.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)';
+            tituloFujao.style.color = "var(--text-dark)";
+        });
     }
-});
+}
 
-// ==========================================
-// EFEITO MÁQUINA DE ESCREVER (QUEM SOMOS)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const typewriterElement = document.getElementById('typewriter-text');
-    
-    if (typewriterElement) {
-        const palavras = ["QUEM SOMOS", "NOSSA HISTÓRIA", "SOMOS A GENIUS HUB", "CÓDIGO E IMERSÃO"];
-        let palavraIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
+// Efeito Hacker (TÍTULO SOLUÇÕES)
+const tituloSolucoes = document.getElementById('titulo-solucoes');
+const letrasAleatorias = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>";
+if (tituloSolucoes) {
+    let intervalo = null;
+    const embaralhar = (evento) => {
+        let iteracao = 0;
+        const textoOriginal = evento.target.dataset.valor;
+        clearInterval(intervalo);
 
-        function typeWriter() {
-            const currentPalavra = palavras[palavraIndex];
-            
-            if (isDeleting) {
-                typewriterElement.textContent = currentPalavra.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typewriterElement.textContent = currentPalavra.substring(0, charIndex + 1);
-                charIndex++;
-            }
+        intervalo = setInterval(() => {
+            evento.target.innerText = textoOriginal
+                .split("")
+                .map((letra, index) => {
+                    if (index < iteracao) return textoOriginal[index];
+                    return letrasAleatorias[Math.floor(Math.random() * letrasAleatorias.length)];
+                })
+                .join("");
 
-            let typeSpeed = isDeleting ? 50 : 100;
-
-            if (!isDeleting && charIndex === currentPalavra.length) {
-                typeSpeed = 2000;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                palavraIndex = (palavraIndex + 1) % palavras.length;
-                typeSpeed = 500;
-            }
-
-            setTimeout(typeWriter, typeSpeed);
-        }
-
-        setTimeout(typeWriter, 1000);
-    }
-});
-
-// ==========================================
-// EFEITO TÍTULO FUJÃO ("NOSSOS PROJETOS")
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const tituloFujao = document.getElementById('titulo-fujao');
-    
-    if (tituloFujao) {
-        const fugir = () => {
-            const moveX = (Math.random() - 0.5) * 400; 
-            const moveY = (Math.random() - 0.5) * 150;
-            const rotacao = (Math.random() - 0.5) * 15;
-            
-            tituloFujao.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1) rotate(${rotacao}deg)`;
-            tituloFujao.style.color = "var(--btn-dark)";
-        };
-
-        tituloFujao.addEventListener('mouseenter', fugir);
-        tituloFujao.addEventListener('touchstart', fugir, { passive: true });
-
-        const casesSection = document.getElementById('cases');
-        if (casesSection) {
-            casesSection.addEventListener('mouseleave', () => {
-                tituloFujao.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)';
-                tituloFujao.style.color = "var(--text-dark)";
-            });
-        }
-    }
-});
-
-// ==========================================
-// EFEITO HACKER / DECODE (TÍTULO SOLUÇÕES)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const tituloSolucoes = document.getElementById('titulo-solucoes');
-    const letrasAleatorias = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>";
-    
-    if (tituloSolucoes) {
-        let intervalo = null;
-
-        const embaralhar = (evento) => {
-            let iteracao = 0;
-            const textoOriginal = evento.target.dataset.valor;
-            
-            clearInterval(intervalo);
-
-            intervalo = setInterval(() => {
-                evento.target.innerText = textoOriginal
-                    .split("")
-                    .map((letra, index) => {
-                        if (index < iteracao) {
-                            return textoOriginal[index];
-                        }
-                        return letrasAleatorias[Math.floor(Math.random() * letrasAleatorias.length)];
-                    })
-                    .join("");
-
-                if (iteracao >= textoOriginal.length) {
-                    clearInterval(intervalo);
-                }
-                
-                iteracao += 1 / 3; 
-            }, 40);
-        };
-
-        tituloSolucoes.addEventListener('mouseover', embaralhar);
-        tituloSolucoes.addEventListener('touchstart', embaralhar, { passive: true });
-    }
-});
+            if (iteracao >= textoOriginal.length) clearInterval(intervalo);
+            iteracao += 1 / 3; 
+        }, 40);
+    };
+    tituloSolucoes.addEventListener('mouseover', embaralhar);
+    tituloSolucoes.addEventListener('touchstart', embaralhar, { passive: true });
+}
