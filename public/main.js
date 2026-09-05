@@ -1,6 +1,3 @@
-// ==========================================
-// 1. MÁGICA DA ANIMAÇÃO (BLINDADA)
-// ==========================================
 function initReveal() {
     const reveals = document.querySelectorAll('.reveal:not(.active)');
     const observer = new IntersectionObserver((entries, obs) => {
@@ -11,14 +8,10 @@ function initReveal() {
             }
         });
     }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
     reveals.forEach(reveal => observer.observe(reveal));
 }
 initReveal();
 
-// ==========================================
-// 2. SUPABASE E RENDERIZAÇÃO
-// ==========================================
 let projetos = []; 
 const gridContainer = document.getElementById('portfolio-grid');
 const filtros = document.querySelectorAll('#filtros-menu li');
@@ -35,15 +28,11 @@ async function carregarProjetosDoBanco() {
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Busca TUDO de uma vez (Soluções e Cases)
-        const { data, error } = await supabase
-            .from('portfolio')
-            .select('*'); 
+        const { data, error } = await supabase.from('portfolio').select('*'); 
 
         if (error) throw error;
 
         if (data) {
-            // Filtra as Soluções para a grade
             projetos = data.filter(i => i.tipo === 'solucao').map(item => ({
                 id: item.id,
                 titulo: item.titulo,
@@ -52,7 +41,6 @@ async function carregarProjetosDoBanco() {
                 link: `case-interno.html?item=${item.id}`
             }));
 
-            // Filtra os Cases para o carrossel
             const casesHome = data.filter(i => i.tipo === 'projeto').map(item => ({
                 id: item.id,
                 titulo: item.titulo,
@@ -68,7 +56,6 @@ async function carregarProjetosDoBanco() {
         renderizarProjetos('todos'); 
     }
 }
-
 carregarProjetosDoBanco();
 
 function renderizarProjetos(filtroAtual) {
@@ -96,24 +83,18 @@ function renderizarProjetos(filtroAtual) {
         card.href = projeto.link;
         card.className = 'card-solucao reveal';
         card.style.transitionDelay = `${index * 0.1}s`; 
-
         card.innerHTML = `
-            <div class="card-img">
-                <img src="${projeto.imagem}" alt="${projeto.titulo}" loading="lazy">
-            </div>
+            <div class="card-img"><img src="${projeto.imagem}" alt="${projeto.titulo}" loading="lazy"></div>
             <div class="card-title">${projeto.titulo}</div>
         `;
         gridContainer.appendChild(card);
     });
-
     setTimeout(initReveal, 50);
 }
 
-// Injeta os cases no carrossel
 function renderizarCases(cases) {
     const track = document.getElementById('cases-track');
     if (!track) return;
-    
     track.innerHTML = '';
 
     if (cases.length === 0) {
@@ -130,7 +111,6 @@ function renderizarCases(cases) {
         track.appendChild(a);
     });
 
-    // Inicia a mecânica do carrossel após inserir os itens na tela
     initCarousel();
 }
 
@@ -143,16 +123,12 @@ filtros.forEach(btn => {
     });
 });
 
-// ==========================================
-// 3. EFEITOS DE SCROLL NO HEADER E MEMÓRIA
-// ==========================================
 const navbar = document.getElementById('navbar');
 const sections = document.querySelectorAll('section');
 const navItems = document.querySelectorAll('.nav-item');
 
 window.addEventListener('scroll', () => {
     if (!navbar) return;
-    
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
     } else {
@@ -182,22 +158,16 @@ window.addEventListener('beforeunload', () => {
 window.addEventListener('DOMContentLoaded', () => {
     const savedScroll = sessionStorage.getItem('scrollPosition');
     if (savedScroll) {
-        setTimeout(() => {
-            window.scrollTo({ top: parseInt(savedScroll), behavior: 'auto' });
-        }, 100);
+        setTimeout(() => { window.scrollTo({ top: parseInt(savedScroll), behavior: 'auto' }); }, 100);
         sessionStorage.removeItem('scrollPosition'); 
     }
 });
 
-// ==========================================
-// 4. LÓGICA DO CARROSSEL ANIMADO
-// ==========================================
 function initCarousel() {
     const track = document.getElementById('cases-track');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
 
-    // Só inicia o clone se tiver mais de um item, para evitar bugs em tela vazia
     if (track && prevBtn && nextBtn && track.children.length > 0) {
         const cardsArray = Array.from(track.children);
         cardsArray.forEach(card => {
@@ -211,16 +181,10 @@ function initCarousel() {
             return cardElement.offsetWidth + 30; 
         };
 
-        nextBtn.addEventListener('click', () => {
-            track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-        });
-
-        prevBtn.addEventListener('click', () => {
-            track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-        });
+        nextBtn.addEventListener('click', () => { track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' }); });
+        prevBtn.addEventListener('click', () => { track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' }); });
 
         let autoplayInterval = setInterval(autoScroll, 3000);
-
         function autoScroll() {
             if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
                 track.scrollTo({ left: 0, behavior: 'smooth' });
@@ -230,15 +194,10 @@ function initCarousel() {
         }
 
         track.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-        track.addEventListener('mouseleave', () => {
-            autoplayInterval = setInterval(autoScroll, 3000);
-        });
+        track.addEventListener('mouseleave', () => { autoplayInterval = setInterval(autoScroll, 3000); });
     }
 }
 
-// ==========================================
-// 5. INTERAÇÕES E EFEITOS VISUAIS
-// ==========================================
 const sectionsDark = document.querySelectorAll('.section-dark');
 const moverEstrelas = (e) => {
     let clientX = e.clientX || (e.touches && e.touches[0].clientX);
@@ -256,7 +215,6 @@ const moverEstrelas = (e) => {
 document.addEventListener('mousemove', moverEstrelas);
 document.addEventListener('touchmove', moverEstrelas, { passive: true });
 
-// Máquina de escrever - Home
 const heroElement = document.getElementById('hero-typewriter');
 const heroCursor = document.querySelector('.hero-cursor');
 if (heroElement) {
@@ -274,7 +232,6 @@ if (heroElement) {
     setTimeout(digitarHero, 600);
 }
 
-// Máquina de escrever - Quem Somos
 const typewriterElement = document.getElementById('typewriter-text');
 if (typewriterElement) {
     const palavras = ["QUEM SOMOS", "NOSSA HISTÓRIA", "SOMOS A GENIUS HUB", "CÓDIGO E IMERSÃO"];
@@ -284,7 +241,6 @@ if (typewriterElement) {
 
     function typeWriter() {
         const currentPalavra = palavras[palavraIndex];
-        
         if (isDeleting) {
             typewriterElement.textContent = currentPalavra.substring(0, charIndex - 1);
             charIndex--;
@@ -294,7 +250,6 @@ if (typewriterElement) {
         }
 
         let typeSpeed = isDeleting ? 50 : 100;
-
         if (!isDeleting && charIndex === currentPalavra.length) {
             typeSpeed = 2000;
             isDeleting = true;
@@ -308,14 +263,12 @@ if (typewriterElement) {
     setTimeout(typeWriter, 1000);
 }
 
-// Título Fujão ("NOSSOS PROJETOS")
 const tituloFujao = document.getElementById('titulo-fujao');
 if (tituloFujao) {
     const fugir = () => {
         const moveX = (Math.random() - 0.5) * 400; 
         const moveY = (Math.random() - 0.5) * 150;
         const rotacao = (Math.random() - 0.5) * 15;
-        
         tituloFujao.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1) rotate(${rotacao}deg)`;
         tituloFujao.style.color = "var(--btn-dark)";
     };
@@ -331,7 +284,6 @@ if (tituloFujao) {
     }
 }
 
-// Efeito Hacker (TÍTULO SOLUÇÕES)
 const tituloSolucoes = document.getElementById('titulo-solucoes');
 const letrasAleatorias = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>";
 if (tituloSolucoes) {
@@ -356,4 +308,25 @@ if (tituloSolucoes) {
     };
     tituloSolucoes.addEventListener('mouseover', embaralhar);
     tituloSolucoes.addEventListener('touchstart', embaralhar, { passive: true });
+}
+
+// ==========================================
+// MENU MOBILE (HAMBÚRGUER LOGIC)
+// ==========================================
+const mobileMenu = document.getElementById('mobile-menu');
+const navMenu = document.querySelector('.nav-menu');
+
+if (mobileMenu && navMenu) {
+    mobileMenu.addEventListener('click', () => {
+        mobileMenu.classList.toggle('is-active');
+        navMenu.classList.toggle('active');
+    });
+
+    const navLinksArray = document.querySelectorAll('.nav-links li a');
+    navLinksArray.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('is-active');
+            navMenu.classList.remove('active');
+        });
+    });
 }

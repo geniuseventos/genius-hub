@@ -6,17 +6,24 @@
     <title>Detalhes do Projeto | Genius Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fonte Fira Code e Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="padding-top: 100px;">
 
-    <!-- HEADER PADRÃO (Agora com o menu completo apontando para a Home) -->
+    <!-- HEADER -->
     <header class="navbar" style="background: var(--bg-dark);">
         <div class="logo">
             <a href="index.html"><img src="assets/img/logog.png" alt="Genius Hub" class="logo-img"></a>
         </div>
+        
+        <!-- Menu Hambúrguer -->
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        
         <nav class="nav-menu">
             <ul class="nav-links">
                 <li><a href="index.html#home" class="nav-item">Home</a></li>
@@ -32,26 +39,23 @@
         <div class="container">
             
             <div class="case-grid">
-                <!-- Imagem do Projeto -->
                 <div class="case-imagem reveal delay-1">
                     <img id="case-img" src="" alt="Imagem do Projeto" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none;">
                 </div>
                 
-                <!-- Informações do Projeto -->
                 <div class="case-info reveal delay-2">
                     <h2 id="case-titulo" style="font-size: 2.5rem; margin-bottom: 20px; text-transform: uppercase;">Carregando...</h2>
                     <p id="case-desc" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;"></p>
                     
                     <h3 style="margin-bottom: 15px;" id="case-tag-title" style="display: none;">Ideal para:</h3>
                     <ul id="case-tags" style="list-style: none; display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px;">
-                        <!-- Tags inseridas via JS -->
                     </ul>
 
                     <a href="#" target="_blank" class="btn-dark" id="case-btn" style="display: none;">Solicitar Orçamento</a>
                 </div>
             </div>
 
-            <!-- Botão Voltar no final da seção, alinhado à direita. -->
+            <!-- Botão Voltar -->
             <div style="text-align: right; margin-top: 60px;" class="reveal delay-3">
                 <a href="javascript:history.back()" class="btn-primary">← Voltar</a>
             </div>
@@ -66,58 +70,27 @@
         </svg>
     </a>
 
-    <!-- Módulo Supabase e Script da Página -->
+    <!-- Supabase e Script da Página -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+    <script src="main.js"></script>
     <script>
-        // Lógica de Entrada Visual (Reveal)
-        function initReveal() {
-            const reveals = document.querySelectorAll('.reveal:not(.active)');
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        obs.unobserve(entry.target); 
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-            reveals.forEach(reveal => observer.observe(reveal));
-        }
-        initReveal();
-
-        // 1. Configura Supabase com a variável correta
         const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 2. Extrai o ID da URL
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('item'); 
         const projetoId = urlParams.get('projeto'); 
         const idBuscado = itemId || projetoId;
 
-        // 3. Busca e Injeta Dados
         async function carregarDetalhes() {
-            if (!idBuscado) {
-                mostrarErro();
-                return;
-            }
+            if (!idBuscado) { mostrarErro(); return; }
 
             try {
-                const { data, error } = await supabaseClient
-                    .from('portfolio')
-                    .select('*')
-                    .eq('id', idBuscado)
-                    .single(); 
+                const { data, error } = await supabaseClient.from('portfolio').select('*').eq('id', idBuscado).single(); 
 
-                if (error || !data) {
-                    mostrarErro();
-                    console.error("Erro ao buscar detalhes:", error);
-                    return;
-                }
+                if (error || !data) { mostrarErro(); return; }
 
-                // Preenche a tela com os dados
                 document.getElementById('case-titulo').innerText = data.titulo;
                 document.getElementById('case-desc').innerText = data.descricao;
                 
@@ -126,7 +99,6 @@
                 imgElement.alt = data.titulo;
                 imgElement.style.display = 'block';
 
-                // Preenche as tags
                 const tagsContainer = document.getElementById('case-tags');
                 tagsContainer.innerHTML = ''; 
                 if (data.tags && Array.isArray(data.tags)) {
@@ -139,7 +111,6 @@
                     document.getElementById('case-tag-title').style.display = 'block';
                 }
 
-                // Exibe o botão de orçamento e configura o link do WhatsApp com o nome do projeto
                 const btnOrcamento = document.getElementById('case-btn');
                 const mensagem = `Olá! Gostaria de solicitar um orçamento para o projeto: ${data.titulo}.`;
                 btnOrcamento.href = `https://wa.me/5583920036455?text=${encodeURIComponent(mensagem)}`;
@@ -147,18 +118,12 @@
                 
             } catch (erro) {
                 mostrarErro();
-                console.error("Erro de execução:", erro);
             }
         }
 
-        // Função de Erro
         function mostrarErro() {
             document.getElementById('case-titulo').innerText = "Conteúdo não encontrado";
             document.getElementById('case-desc').innerText = "O projeto ou solução que você procura não está disponível ou o link está incorreto.";
-            document.getElementById('case-img').style.display = 'none';
-            document.getElementById('case-tags').innerHTML = '';
-            document.getElementById('case-tag-title').style.display = 'none';
-            document.getElementById('case-btn').style.display = 'none';
         }
 
         carregarDetalhes();
