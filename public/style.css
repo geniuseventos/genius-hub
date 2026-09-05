@@ -221,6 +221,7 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
                 box-shadow 0.4s ease, border-color 0.4s ease;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    height: 100%; /* FUNDAMENTAL para alinhar o card */
 }
 
 .card-solucao:hover {
@@ -697,7 +698,7 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
     .hero-content h2 { font-size: 2rem; }
     .hero-video { height: 250px; }
     
-    /* 1. Suavizar curva drasticamente (de 200% para 350%) no Mobile */
+    /* 1. Suavizar curva drasticamente no Mobile */
     .curve-top, .curve-top-reverse, [style*="clip-path"] { 
         clip-path: ellipse(350% 100% at 50% 100%) !important; 
         padding-top: 80px; 
@@ -705,15 +706,23 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
 
     /* 2. Corrigir o espaço exagerado e margin negativa gerada pelos estilos embutidos da página História */
     .hero.section-light[style*="padding"] {
-        padding-top: 40px !important; /* REDUZIDO DRASTICAMENTE O TOPO AQUI */
-        padding-bottom: 60px !important;
+        padding-top: 30px !important;
+        padding-bottom: 20px !important;
     }
     .section-dark[style*="clip-path"] {
-        padding-top: 100px !important;
-        margin-top: -50px !important;
+        padding-top: 60px !important;
+        margin-top: -20px !important;
     }
     
-    .grid-cards { grid-template-columns: 1fr; gap: 20px; }
+    /* 2 colunas nos cards de soluções no mobile */
+    .grid-cards { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important; 
+    }
+    .card-solucao { border-radius: 12px; }
+    .card-img { height: 100px !important; }
+    .card-title { font-size: 0.75rem !important; padding: 8px 5px !important; }
     
     /* Filtros Scroll Horizontal */
     .filtros { 
@@ -750,11 +759,11 @@ h2 { font-weight: 900; letter-spacing: -0.5px; }
     /* ESPECÍFICO PARA A ASSINATURA NA PÁGINA "A JORNADA" */
     .assinatura-historia { flex-direction: column; text-align: center; margin: 0 auto; gap: 10px; }
     
-    /* 3. Centralização forçada do título "A JORNADA" */
+    /* Centralização forçada e compacta do título "A JORNADA" */
     .hero-title-jornada { 
         font-size: 1.8rem !important; 
         line-height: 1.2; 
-        margin: 0 auto 15px auto !important; 
+        margin: 0 auto 10px auto !important; 
         text-align: center !important;
         width: 100% !important;
         display: block !important;

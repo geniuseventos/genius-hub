@@ -1,3 +1,6 @@
+// ==========================================
+// 1. MÁGICA DA ANIMAÇÃO (BLINDADA)
+// ==========================================
 function initReveal() {
     const reveals = document.querySelectorAll('.reveal:not(.active)');
     const observer = new IntersectionObserver((entries, obs) => {
@@ -8,10 +11,14 @@ function initReveal() {
             }
         });
     }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
     reveals.forEach(reveal => observer.observe(reveal));
 }
 initReveal();
 
+// ==========================================
+// 2. SUPABASE E RENDERIZAÇÃO
+// ==========================================
 let projetos = []; 
 const gridContainer = document.getElementById('portfolio-grid');
 const filtros = document.querySelectorAll('#filtros-menu li');
@@ -38,6 +45,7 @@ async function carregarProjetosDoBanco() {
                 titulo: item.titulo,
                 categoria: item.categoria,
                 imagem: item.imagem,
+                descricao: item.descricao, 
                 link: `case-interno.html?item=${item.id}`
             }));
 
@@ -56,6 +64,7 @@ async function carregarProjetosDoBanco() {
         renderizarProjetos('todos'); 
     }
 }
+
 carregarProjetosDoBanco();
 
 function renderizarProjetos(filtroAtual) {
@@ -83,12 +92,33 @@ function renderizarProjetos(filtroAtual) {
         card.href = projeto.link;
         card.className = 'card-solucao reveal';
         card.style.transitionDelay = `${index * 0.1}s`; 
+
+        const descResumida = projeto.descricao 
+            ? (projeto.descricao.length > 40 ? projeto.descricao.substring(0, 45) + '...' : projeto.descricao) 
+            : '';
+
+        // Layout do Card Ajustado: Sem .card-title para remover o !important do CSS. Tudo colado e organizado.
         card.innerHTML = `
-            <div class="card-img"><img src="${projeto.imagem}" alt="${projeto.titulo}" loading="lazy"></div>
-            <div class="card-title">${projeto.titulo}</div>
+            <div class="card-img" style="height: 110px; flex-shrink: 0;">
+                <img src="${projeto.imagem}" alt="${projeto.titulo}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="padding: 10px; display: flex; flex-direction: column; flex-grow: 1; justify-content: flex-start; text-align: left;">
+                <h4 style="color: var(--text-dark); font-weight: 900; font-size: 0.85rem; line-height: 1.2; text-transform: uppercase; margin: 0 0 5px 0;">
+                    ${projeto.titulo}
+                </h4>
+                <p style="color: #666; font-size: 0.75rem; line-height: 1.3; margin: 0 0 12px 0;">
+                    ${descResumida}
+                </p>
+                <div style="margin-top: auto;">
+                    <span style="background: var(--text-dark); color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-block;">
+                        Ver Detalhes
+                    </span>
+                </div>
+            </div>
         `;
         gridContainer.appendChild(card);
     });
+
     setTimeout(initReveal, 50);
 }
 
