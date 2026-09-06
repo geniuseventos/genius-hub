@@ -18,7 +18,6 @@
             </a>
         </div>
         
-        <!-- Menu Hambúrguer -->
         <div class="menu-toggle" id="mobile-menu">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -37,15 +36,15 @@
         <div class="header-spacer"></div>
     </header>
 
+    <!-- 1. HERO (CLARO) -->
     <section id="home" class="hero section-light">
         <div class="container hero-container">
             <div class="hero-content reveal">
                 <h2 style="font-size: 2.5rem; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; min-height: 80px;">
                     <span id="hero-typewriter"></span><span class="hero-cursor typewriter-cursor">|</span>
                 </h2>
-                <h2 class="section-title reveal" id="titulo-solucoes" data-valor="SOLUÇÕES" style="cursor: crosshair; display: inline-block; width: 100%; margin-bottom: 15px;">SOLUÇÕES</h2>
                 <p>Transformamos eventos em experiências memoráveis através de tecnologia de ponta e ativações imersivas.</p>
-                <a href="https://wa.me/5583920036455?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20as%20soluções%20do%20Genius%20Hub." target="_blank" class="btn-primary"><span>Fale Conosco</span></a>
+                <a href="https://wa.me/5583920036455?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20as%20soluções%20do%20Genius%20Hub." target="_blank" class="btn-dark"><span>Fale Conosco</span></a>
             </div>
             <div class="hero-video reveal delay-1">
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/KB9wq6sPjzA?si=yzvjjZpD5b4dlR0X" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -53,19 +52,17 @@
         </div>
     </section>
 
-    <!-- SEÇÃO DE SOLUÇÕES (NOVO FORMATO DE CATEGORIAS DARK TECH) -->
-    <section id="solucoes" class="solucoes section-dark curve-top">
+    <!-- 2. CATEGORIAS DE SOLUÇÕES (ESCURO) -->
+    <section id="solucoes" class="solucoes section-dark curve-top" style="position: relative; z-index: 2;">
         <div class="container">
-            <h2 class="section-title reveal" id="titulo-solucoes" data-valor="SOLUÇÕES" style="cursor: crosshair; display: inline-block; width: 100%; margin-bottom: 15px;">SOLUÇÕES</h2>
+            <h2 class="section-title reveal" style="cursor: crosshair; display: inline-block; width: 100%; margin-bottom: 15px;">SOLUÇÕES</h2>
             
             <p class="reveal" style="text-align: center; color: #a0a0a0; font-size: 1.1rem; max-width: 600px; margin: 0 auto 50px auto;">
                 Explore nossas categorias e descubra a ativação tecnológica ideal para engajar o público do seu evento.
             </p>
             
-            <!-- VISÃO: CATEGORIAS EM CARDS (AGORA SÃO LINKS) -->
             <div class="grid-categorias reveal delay-1" id="categorias-grid">
                 
-                <!-- Card 1: Games -->
                 <a href="categoria.html?cat=jogos" class="card-categoria" style="text-decoration: none;">
                     <div class="categoria-icon">
                         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect><path d="M6 12h4M8 10v4M15 13h.01M18 11h.01"></path></svg>
@@ -78,7 +75,6 @@
                     </div>
                 </a>
 
-                <!-- Card 2: Sistemas -->
                 <a href="categoria.html?cat=gestao" class="card-categoria" style="text-decoration: none;">
                     <div class="categoria-icon">
                         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
@@ -91,7 +87,6 @@
                     </div>
                 </a>
 
-                <!-- Card 3: Experiências & Projetos -->
                 <a href="categoria.html?cat=experiencias" class="card-categoria" style="text-decoration: none;">
                     <div class="categoria-icon">
                         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path></svg>
@@ -104,7 +99,6 @@
                     </div>
                 </a>
 
-                <!-- Card 4: Lançamentos -->
                 <a href="categoria.html?cat=ia" class="card-categoria" style="text-decoration: none;">
                     <div class="categoria-icon">
                         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
@@ -121,54 +115,44 @@
         </div>
     </section>
 
-    <section id="cases" class="cases section-light curve-top-reverse">
+    <!-- 3. VITRINE DE SOLUÇÕES (CLARO) -->
+    <section id="vitrine" class="section-light curve-top-reverse" style="padding-bottom: 80px; position: relative; z-index: 3;">
         <div class="container">
-            <h2 class="section-title dark-text reveal">
+            <h2 class="section-title dark-text reveal" style="margin-bottom: 50px;">SOLUÇÕES EM DESTAQUE</h2>
+            
+            <div class="vitrine-wrapper reveal delay-1">
+                <button class="carousel-btn prev-btn" id="prev-vitrine">&#10094;</button>
+                <div class="vitrine-track" id="vitrine-track">
+                    <!-- Cards injetados via JS -->
+                </div>
+                <button class="carousel-btn next-btn" id="next-vitrine">&#10095;</button>
+            </div>
+
+            <div class="reveal delay-2" style="text-align: center; margin-top: 40px;">
+                <a href="categoria.html?cat=jogos" class="btn-dark btn-center"><span>Ver catálogo completo</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. NOSSOS CLIENTES (ESCURO) -->
+    <section id="cases" class="cases section-dark curve-top" style="padding-top: 100px; padding-bottom: 80px; position: relative; z-index: 4;">
+        <div class="container">
+            <h2 class="section-title reveal">
                 <span id="titulo-fujao" style="display: inline-block; padding: 40px; margin: -40px; transition: transform 0.2s ease-out; cursor: crosshair;">NOSSOS CLIENTES</span>
             </h2>
             
             <div class="carousel-wrapper reveal delay-1">
-                <button class="carousel-btn prev-btn" id="prev-btn">&#10094;</button>
+                <button class="carousel-btn prev-btn" id="prev-cases">&#10094;</button>
                 <div class="carousel-track" id="cases-track"></div>
-                <button class="carousel-btn next-btn" id="next-btn">&#10095;</button>
+                <button class="carousel-btn next-btn" id="next-cases">&#10095;</button>
             </div>
 
-            <div class="carousel-dots reveal delay-2" id="carousel-dots"></div>
-            <a href="todos-cases.html" class="btn-dark btn-center reveal delay-3" style="margin-top: 20px; margin-bottom: 120px; text-align: center;"><span>Ver todos os cases</span></a>
+            <a href="todos-cases.html" class="btn-secondary btn-center reveal delay-3" style="margin-top: 40px;"><span>Ver todos os cases</span></a>
         </div>
     </section>
 
-    <section id="quem-somos" class="section-dark" style="padding: 150px 0 120px 0; margin-top: -80px; clip-path: ellipse(150% 100% at 50% 100%); position: relative; z-index: 4;">
-        <div class="container">
-            
-            <h2 class="section-title reveal" style="margin-bottom: 60px; min-height: 40px;">
-                <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
-            </h2>
-            
-            <div class="sobre-container reveal delay-1" style="display: flex; flex-wrap: wrap; gap: 50px; align-items: stretch;">
-                <div class="sobre-texto" style="flex: 1; min-width: 320px; text-align: left; display: flex; flex-direction: column; justify-content: center;">
-                    <p style="color: #ccc; font-size: 1.15rem; line-height: 1.7; margin-bottom: 20px;">
-                        Somos uma equipe nordestina apaixonada por tecnologia e games. Nascemos com um único propósito: transformar eventos estáticos em experiências imersivas inesquecíveis.
-                    </p>
-                    <p style="color: #ccc; font-size: 1.15rem; line-height: 1.7; margin-bottom: 30px;">
-                        Unimos nosso amor pelo código com a inovação para garantir que o seu público seja o verdadeiro protagonista da ativação.
-                    </p>
-                    <a href="nossa-historia.html" class="btn-secondary" style="margin-bottom: 40px; width: fit-content; margin-top: 0;"><span>Conheça nossa história</span></a>
-                    
-                    <div class="assinatura" style="border-left: 4px solid var(--text-light); padding-left: 15px;">
-                        <h4 style="font-size: 1.3rem; font-weight: 900; color: var(--text-light); margin-bottom: 5px; text-transform: uppercase;">Éverton José da Costa</h4>
-                        <span style="color: #a0a0a0; font-family: var(--font-code); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">CEO, Genius Hub</span>
-                    </div>
-                </div>
-
-                <div class="sobre-imagem" style="flex: 1; min-width: 320px; min-height: 400px; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); position: relative;">
-                    <img src="assets/img/fotoeverton.jpg" alt="Éverton José da Costa - CEO Genius Hub" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; transition: transform 0.4s ease;">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="ideia-realidade" class="section-light curve-top-reverse" style="padding-bottom: 120px; position: relative; z-index: 3;">
+    <!-- 5. IDEIA (CLARO) -->
+    <section id="ideia-realidade" class="section-light curve-top-reverse" style="padding-top: 100px; padding-bottom: 120px; position: relative; z-index: 5;">
         <div class="container reveal">
             <div class="ideia-interativa">
                 <h2 class="frase-pensa">Você pensa na ideia.</h2>
@@ -176,15 +160,51 @@
                     <h2 class="frase-constroi">
                         Nós construímos a <span class="destaque-tarja">EXPERIÊNCIA</span>
                     </h2>
-                    <a href="https://wa.me/5583920036455?text=Bora%20codar!" target="_blank" class="btn-dark btn-hover-reveal"><span>Bora codar?</span></a>
+                    <a href="https://wa.me/5583920036455?text=Bora%20codar!" target="_blank" class="btn-dark btn-center btn-hover-reveal"><span>Bora codar?</span></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="faq" class="section-dark curve-top" style="padding-bottom: 120px; position: relative; z-index: 4;">
+    <!-- 6. SOBRE NÓS (ESCURO) -->
+    <section id="quem-somos" class="section-dark curve-top" style="padding: 120px 0; position: relative; z-index: 6;">
         <div class="container">
-            <h2 class="section-title reveal" style="margin-bottom: 50px;">PERGUNTAS FREQUENTES</h2>
+            
+            <h2 class="section-title reveal" style="margin-bottom: 60px; min-height: 40px;">
+                <span id="typewriter-text">SOBRE NÓS</span>
+            </h2>
+            
+            <div class="sobre-container reveal delay-1" style="display: flex; flex-wrap: wrap; gap: 50px; align-items: stretch;">
+                
+                <!-- FOTO NA ESQUERDA -->
+                <div class="sobre-imagem" style="flex: 1; min-width: 320px; min-height: 400px; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); position: relative;">
+                    <img src="assets/img/fotoeverton.jpg" alt="Éverton José da Costa - CEO Genius Hub" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; transition: transform 0.4s ease;">
+                </div>
+
+                <!-- TEXTO NA DIREITA -->
+                <div class="sobre-texto" style="flex: 1; min-width: 320px; text-align: left; display: flex; flex-direction: column; justify-content: center;">
+                    <p style="color: #ccc; font-size: 1.15rem; line-height: 1.7; margin-bottom: 20px;">
+                        Somos uma equipe nordestina apaixonada por tecnologia e games. Nascemos com um único propósito: transformar eventos estáticos em experiências imersivas inesquecíveis.
+                    </p>
+                    <p style="color: #ccc; font-size: 1.15rem; line-height: 1.7; margin-bottom: 30px;">
+                        Unimos nosso amor pelo código com a inovação para garantir que o seu público seja o verdadeiro protagonista da ativação.
+                    </p>
+                    <a href="nossa-historia.html" class="btn-secondary btn-center" style="margin-bottom: 40px; margin-top: 0; margin-left: 0;"><span>Conheça nossa história</span></a>
+                    
+                    <div class="assinatura" style="border-left: 4px solid var(--text-light); padding-left: 15px;">
+                        <h4 style="font-size: 1.3rem; font-weight: 900; color: var(--text-light); margin-bottom: 5px; text-transform: uppercase;">Éverton José da Costa</h4>
+                        <span style="color: #a0a0a0; font-family: var(--font-code); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">CEO, Genius Hub</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. FAQ (CLARO) -->
+    <section id="faq" class="section-light curve-top-reverse" style="padding-top: 100px; padding-bottom: 120px; position: relative; z-index: 7;">
+        <div class="container">
+            <h2 class="section-title dark-text reveal" style="margin-bottom: 50px;">PERGUNTAS FREQUENTES</h2>
             <div class="faq-container reveal delay-1">
                 <details class="faq-item">
                     <summary class="faq-question">Vocês alugam apenas os equipamentos?</summary>
@@ -214,7 +234,8 @@
         </div>
     </section>
 
-    <footer id="contato" class="footer section-light curve-top-reverse" style="padding-bottom: 50px; position: relative; z-index: 5;">
+    <!-- 8. FOOTER (ESCURO) -->
+    <footer id="contato" class="footer section-dark curve-top" style="padding-bottom: 50px; position: relative; z-index: 8;">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">

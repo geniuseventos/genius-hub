@@ -1,21 +1,12 @@
-// ============================================================
-// GENIUS HUB - MAIN.JS
-// ============================================================
+const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// ============================================================
-// 0. UTILITÁRIOS
-// ============================================================
-// Função global para remover acentos, espaços extras e maiúsculas
-const padronizar = (texto) => 
-    String(texto || '').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const padronizar = (texto) => String(texto || '').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-// ============================================================
-// 1. ANIMAÇÕES DE REVEAL
-// ============================================================
 function initReveal() {
     const reveals = document.querySelectorAll('.reveal');
     if (!reveals.length) return;
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -24,343 +15,152 @@ function initReveal() {
             }
         });
     }, { threshold: 0.1 });
-
-    reveals.forEach((element) => {
-        observer.observe(element);
-    });
+    reveals.forEach((element) => { observer.observe(element); });
 }
 
-// ============================================================
-// 2. TYPEWRITER DO HERO
-// ============================================================
 function initHeroTypewriter() {
     const elemento = document.getElementById('hero-typewriter');
     if (!elemento) return;
-
-    const textos = [
-        'TECNOLOGIA QUE GERA EXPERIÊNCIAS.',
-        'INTERAÇÃO QUE GERA RESULTADOS.',
-        'INOVAÇÃO QUE CONECTA PESSOAS.'
-    ];
-
-    let textoAtual = 0;
-    let caractereAtual = 0;
-    let apagando = false;
+    const textos = ['TECNOLOGIA QUE GERA EXPERIÊNCIAS.', 'INTERAÇÃO QUE GERA RESULTADOS.', 'INOVAÇÃO QUE CONECTA PESSOAS.'];
+    let textoAtual = 0, caractereAtual = 0, apagando = false;
 
     function escrever() {
         const texto = textos[textoAtual];
-
         if (!apagando) {
             elemento.textContent = texto.substring(0, caractereAtual + 1);
             caractereAtual++;
-
-            if (caractereAtual === texto.length) {
-                apagando = true;
-                setTimeout(escrever, 2500);
-                return;
-            }
+            if (caractereAtual === texto.length) { apagando = true; setTimeout(escrever, 2500); return; }
             setTimeout(escrever, 70);
         } else {
             elemento.textContent = texto.substring(0, caractereAtual - 1);
             caractereAtual--;
-
-            if (caractereAtual === 0) {
-                apagando = false;
-                textoAtual = (textoAtual + 1) % textos.length;
-                setTimeout(escrever, 500);
-                return;
-            }
+            if (caractereAtual === 0) { apagando = false; textoAtual = (textoAtual + 1) % textos.length; setTimeout(escrever, 500); return; }
             setTimeout(escrever, 40);
         }
     }
-
     escrever();
 }
 
-// ============================================================
-// 3. ATUALIZAR CONTADORES DAS SOLUÇÕES (VERSÃO ALIAS)
-// ============================================================
 function atualizarContadoresSolucoes(itens) {
-    // 1. Filtra as Soluções
-    const solucoes = itens.filter(item => padronizar(item.tipo) === 'solucao');
-    console.log('Total de soluções no banco:', solucoes.length);
-
-    // 2. Contadores (Agrupando nomes do BD antigo e do Formulário Novo)
-    const contagens = {
-        jogos: 0,
-        gestao: 0,
-        totem: 0,
-        vr: 0,
-        ia: 0
-    };
-
-    solucoes.forEach(item => {
-        const cat = padronizar(item.categoria);
-        // Mapeia tanto os nomes antigos (jogos, gestao) quanto os do form novo (games, sistemas)
-        if (cat === 'jogos' || cat === 'games') contagens.jogos++;
-        else if (cat === 'gestao' || cat === 'sistemas') contagens.gestao++;
-        else if (cat === 'totem' || cat === 'totem fotografico') contagens.totem++;
-        else if (cat === 'vr' || cat === 'realidade virtual' || cat === 'experiencias & projetos') contagens.vr++;
-        else if (cat === 'ia' || cat === 'lancamentos' || cat === 'lancamentos / ia') contagens.ia++;
-    });
-
-    console.log('Contagens por categoria (corrigido):', contagens);
-
-    // 3. Função inteligente para atualizar o HTML
-    function atualizarElemento(elemento, quantidade) {
-        if (!elemento) return;
-        const contadorInterno = elemento.querySelector('.quantidade-solucao, .contador, .count, .numero, .quantidade');
-        
-        if (contadorInterno) {
-            contadorInterno.textContent = quantidade;
-        } else {
-            // Se for "0 soluções" tudo junto, troca o primeiro número que achar
-            elemento.innerHTML = elemento.innerHTML.replace(/\d+/, quantidade);
+    let jogos = 0, sistemas = 0, experiencias = 0, lancamentos = 0;
+    itens.forEach(item => {
+        const tipo = padronizar(item.tipo);
+        if (tipo === 'solucao') {
+            const cat = padronizar(item.categoria);
+            if (cat === 'jogos') jogos++;
+            else if (cat === 'gestao') sistemas++;
+            else if (cat === 'totem' || cat === 'vr') experiencias++;
+            else if (cat === 'ia') lancamentos++;
         }
-    }
-
-    // 4. Atualizar por ID
-    atualizarElemento(document.getElementById('contador-jogos'), contagens.jogos);
-    atualizarElemento(document.getElementById('contador-gestao'), contagens.gestao);
-    atualizarElemento(document.getElementById('contador-totem'), contagens.totem);
-    atualizarElemento(document.getElementById('contador-vr'), contagens.vr);
-    atualizarElemento(document.getElementById('contador-ia'), contagens.ia);
-
-    // 5. Atualizar por data-categoria ou classes
-    const elementosCategoria = document.querySelectorAll('[data-categoria], .quantidade-solucao');
-    
-    elementosCategoria.forEach((elemento) => {
-        const cat = padronizar(elemento.getAttribute('data-categoria'));
-        
-        if (cat === 'jogos' || cat === 'games') atualizarElemento(elemento, contagens.jogos);
-        else if (cat === 'gestao' || cat === 'sistemas') atualizarElemento(elemento, contagens.gestao);
-        else if (cat === 'totem' || cat === 'totem fotografico') atualizarElemento(elemento, contagens.totem);
-        else if (cat === 'vr' || cat === 'realidade virtual' || cat === 'experiencias & projetos') atualizarElemento(elemento, contagens.vr);
-        else if (cat === 'ia' || cat === 'lancamentos' || cat === 'lancamentos / ia') atualizarElemento(elemento, contagens.ia);
     });
+
+    const elGames = document.getElementById('count-games'); if (elGames) elGames.textContent = `${jogos} soluções`;
+    const elSistemas = document.getElementById('count-sistemas'); if (elSistemas) elSistemas.textContent = `${sistemas} soluções`;
+    const elExperiencias = document.getElementById('count-experiencias'); if (elExperiencias) elExperiencias.textContent = `${experiencias} soluções`;
+    const elLancamentos = document.getElementById('count-lancamentos'); if (elLancamentos) elLancamentos.textContent = `${lancamentos} soluções`;
 }
 
-// ============================================================
-// 4. CARREGAR DADOS DO SUPABASE
-// ============================================================
 async function carregarProjetosHome() {
-    if (typeof supabase === 'undefined') {
-        console.error('Supabase não foi carregado.');
-        return;
-    }
-
     try {
-        const { data, error } = await supabase
-            .from('portfolio')
-            .select('*')
-            .order('id', { ascending: false });
-
-        if (error) {
-            console.error('Erro ao carregar dados do Supabase:', error);
-            return;
-        }
+        const { data, error } = await supabaseClient.from('portfolio').select('*').order('id', { ascending: false });
+        if (error) { console.error('Erro:', error); return; }
 
         const itens = data || [];
-        console.log('Itens carregados do Supabase:', itens);
-
-        // ====================================================
-        // CONTADORES GERAIS
-        // ====================================================
-        const contadorProjetos = document.getElementById('contador-projetos');
-        const contadorSolucoes = document.getElementById('contador-solucoes');
-        const contadorExperiencias = document.getElementById('contador-experiencias');
-
-        const totalProjetos = itens.filter(
-            item => padronizar(item.tipo) === 'projeto'
-        ).length;
-        if (contadorProjetos) contadorProjetos.textContent = totalProjetos;
-
-        const totalSolucoes = itens.filter(
-            item => padronizar(item.tipo) === 'solucao'
-        ).length;
-        if (contadorSolucoes) contadorSolucoes.textContent = totalSolucoes;
-
-        // Atualizado para considerar os novos nomes de categoria no contador global
-        const totalExperiencias = itens.filter(item => {
-            const tipo = padronizar(item.tipo);
-            const categoria = padronizar(item.categoria);
-            return tipo === 'solucao' && (
-                categoria === 'totem' || 
-                categoria === 'totem fotografico' || 
-                categoria === 'vr' || 
-                categoria === 'realidade virtual'
-            );
-        }).length;
-        if (contadorExperiencias) contadorExperiencias.textContent = totalExperiencias;
-
-        // ====================================================
-        // ATUALIZA OS CARDS DE SOLUÇÕES
-        // ====================================================
         atualizarContadoresSolucoes(itens);
 
-        // ====================================================
-        // CARREGAR CASES
-        // ====================================================
-        const projetos = itens.filter(
-            item => padronizar(item.tipo) === 'projeto'
-        );
+        const solucoes = itens.filter(item => padronizar(item.tipo) === 'solucao');
+        renderizarVitrineSolucoes(solucoes);
+
+        const projetos = itens.filter(item => padronizar(item.tipo) === 'projeto');
         renderizarCases(projetos);
 
-    } catch (error) {
-        console.error('Erro inesperado:', error);
-    }
+    } catch (error) { console.error('Erro:', error); }
 }
 
-// ============================================================
-// 5. RENDERIZAR CASES
-// ============================================================
-function renderizarCases(projetos) {
-    const container = document.getElementById('cases-container');
-    if (!container) return;
+function renderizarVitrineSolucoes(solucoes) {
+    const track = document.getElementById('vitrine-track');
+    if (!track) return;
+    track.innerHTML = '';
+    
+    solucoes.forEach((solucao) => {
+        const a = document.createElement('a');
+        a.href = `case-interno.html?item=${solucao.id}`;
+        a.className = 'modern-card';
 
-    if (!projetos || projetos.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <p>Nenhum projeto cadastrado no momento.</p>
+        const categoriasMap = { 'jogos': 'GAMES', 'gestao': 'SISTEMAS', 'totem': 'EXPERIÊNCIAS', 'vr': 'REALIDADE VIRTUAL', 'ia': 'LANÇAMENTOS' };
+        const catName = categoriasMap[solucao.categoria] || 'SOLUÇÃO';
+        const desc = solucao.descricao && solucao.descricao.length > 80 ? solucao.descricao.substring(0, 80) + '...' : (solucao.descricao || '');
+
+        a.innerHTML = `
+            <img src="${solucao.imagem}" alt="${solucao.titulo}" class="modern-card-img" loading="lazy">
+            <div class="modern-card-body">
+                <div class="modern-card-tag">* ${catName}</div>
+                <h4 class="modern-card-title">${solucao.titulo}</h4>
+                <p class="modern-card-desc">${desc}</p>
+                <div class="modern-card-btn">Ver Detalhes</div>
             </div>
         `;
+        track.appendChild(a);
+    });
+}
+
+function renderizarCases(projetos) {
+    const container = document.getElementById('cases-track');
+    if (!container) return;
+    if (!projetos || projetos.length === 0) {
+        container.innerHTML = `<div class="empty-state"><p>Nenhum projeto cadastrado no momento.</p></div>`;
         return;
     }
-
     container.innerHTML = '';
 
     projetos.slice(0, 6).forEach((projeto) => {
-        const imagem = projeto.imagem || projeto.imagem_1 || 'assets/img/placeholder.jpg';
+        const imagem = projeto.imagem || 'assets/img/placeholder.jpg';
         const titulo = projeto.titulo || 'Projeto Genius Hub';
-        const descricao = projeto.descricao || 'Conheça este projeto desenvolvido pelo Genius Hub.';
-        const categoria = projeto.categoria || 'Experiência';
+        const descricao = projeto.descricao || 'Conheça este projeto.';
         const id = projeto.id;
 
-        const card = document.createElement('article');
-        card.className = 'case-card reveal';
+        const card = document.createElement('a');
+        card.href = `case-interno.html?projeto=${id}`;
+        card.className = 'case-card';
+        card.style.backgroundImage = `url('${imagem}')`;
 
         card.innerHTML = `
-            <a href="case-interno.html?item=${id}" class="case-link">
-                <div class="case-image">
-                    <img src="${imagem}" alt="${titulo}" loading="lazy">
-                    <div class="case-overlay">
-                        <span>VER PROJETO →</span>
-                    </div>
-                </div>
-                <div class="case-content">
-                    <span class="case-category">${categoria}</span>
-                    <h3>${titulo}</h3>
-                    <p>${descricao}</p>
-                </div>
-            </a>
+            <div class="case-overlay"></div>
+            <h3>${titulo}</h3>
         `;
         container.appendChild(card);
     });
-
-    initReveal();
 }
 
-// ============================================================
-// 6. NAVBAR
-// ============================================================
 function initNavbarScroll() {
     const navbar = document.querySelector('.navbar');
     if (!navbar) return;
-
-    function atualizarNavbar() {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    }
-
-    window.addEventListener('scroll', atualizarNavbar, { passive: true });
-    atualizarNavbar();
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+    }, { passive: true });
 }
 
-// ============================================================
-// 7. CARROSSEL
-// ============================================================
-function initCarousel() {
-    const carousel = document.querySelector('.cases-grid');
-    if (!carousel) return;
+function initCarousels() {
+    const trackVitrine = document.getElementById('vitrine-track');
+    const prevVitrine = document.getElementById('prev-vitrine');
+    const nextVitrine = document.getElementById('next-vitrine');
 
-    const cards = carousel.querySelectorAll('.case-card');
-    if (cards.length <= 1) return;
-
-    let indice = 0;
-
-    function atualizarCarousel() {
-        cards.forEach((card, index) => {
-            card.classList.remove('active');
-            if (index === indice) {
-                card.classList.add('active');
-            }
-        });
+    if (trackVitrine && prevVitrine && nextVitrine) {
+        nextVitrine.addEventListener('click', () => { trackVitrine.scrollBy({ left: 345, behavior: 'smooth' }); });
+        prevVitrine.addEventListener('click', () => { trackVitrine.scrollBy({ left: -345, behavior: 'smooth' }); });
     }
 
-    function proximo() {
-        indice = (indice + 1) % cards.length;
-        atualizarCarousel();
-    }
+    const trackCases = document.getElementById('cases-track');
+    const prevCases = document.getElementById('prev-cases');
+    const nextCases = document.getElementById('next-cases');
 
-    if (window.innerWidth <= 768) {
-        setInterval(proximo, 5000);
+    if (trackCases && prevCases && nextCases) {
+        nextCases.addEventListener('click', () => { trackCases.scrollBy({ left: 340, behavior: 'smooth' }); });
+        prevCases.addEventListener('click', () => { trackCases.scrollBy({ left: -340, behavior: 'smooth' }); });
     }
 }
 
-// ============================================================
-// 8. EFEITO DARK / PARALLAX
-// ============================================================
-function initDarkSectionEffect() {
-    const section = document.querySelector('#solucoes');
-    if (!section) return;
-
-    let ticking = false;
-
-    function atualizarParallax() {
-        if (ticking) return;
-
-        window.requestAnimationFrame(() => {
-            const rect = section.getBoundingClientRect();
-            const altura = window.innerHeight;
-
-            if (rect.bottom > 0 && rect.top < altura) {
-                const progresso = (altura - rect.top) / (altura + rect.height);
-                section.style.setProperty('--parallax-progress', progresso);
-            }
-            ticking = false;
-        });
-
-        ticking = true;
-    }
-
-    window.addEventListener('scroll', atualizarParallax, { passive: true });
-    atualizarParallax();
-}
-
-// ============================================================
-// 9. TÍTULO NOSSOS CLIENTES
-// ============================================================
-function initTituloFujao() {
-    const titulo = document.getElementById('titulo-fujao');
-    if (!titulo) return;
-
-    const valorOriginal = titulo.textContent.trim();
-
-    titulo.addEventListener('mouseenter', () => {
-        titulo.textContent = 'NOSSOS CLIENTES';
-    });
-
-    titulo.addEventListener('mouseleave', () => {
-        titulo.textContent = valorOriginal;
-    });
-}
-
-// ============================================================
-// 10. MENU MOBILE
-// ============================================================
 function initMobileMenu() {
     const menuButton = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.nav-links');
@@ -371,8 +171,7 @@ function initMobileMenu() {
         menuButton.classList.toggle('active');
     });
 
-    const links = menu.querySelectorAll('a');
-    links.forEach((link) => {
+    menu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             menu.classList.remove('active');
             menuButton.classList.remove('active');
@@ -380,32 +179,11 @@ function initMobileMenu() {
     });
 }
 
-// ============================================================
-// 11. REMOVER SOLUÇÕES DO HOME
-// ============================================================
-function corrigirTituloSolucoes() {
-    const home = document.getElementById('home');
-    if (!home) return;
-
-    const elementos = home.querySelectorAll('#titulo-solucoes');
-    elementos.forEach((elemento) => {
-        elemento.remove();
-    });
-}
-
-// ============================================================
-// 12. INICIALIZAÇÃO
-// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Genius Hub iniciado.');
-
     initHeroTypewriter();
     initReveal();
     initNavbarScroll();
-    initCarousel();
-    initDarkSectionEffect();
-    initTituloFujao();
+    initCarousels();
     initMobileMenu();
-    corrigirTituloSolucoes();
     carregarProjetosHome();
 });
