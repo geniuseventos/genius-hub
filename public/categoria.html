@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soluções | Genius Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ESTILO DOS CARDS PREMIUM DARK (IMAGEM 3) */
+        .modern-card { background: #050505; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; height: 100%; }
+        .modern-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .modern-card-img { width: 100%; height: 220px; object-fit: cover; background: #222; }
+        .modern-card-body { padding: 25px 25px 30px 25px; display: flex; flex-direction: column; flex-grow: 1; text-align: left; }
+        .modern-card-tag { color: #3b82f6; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; font-family: var(--font-code); letter-spacing: 0.5px; }
+        .modern-card-title { color: #ffffff; font-size: 1.3rem; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; line-height: 1.2; }
+        .modern-card-desc { color: #a0a0a0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
+        .modern-card-btn { background: #ffffff; color: #050505; padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 800; width: fit-content; transition: background 0.3s; }
+        .modern-card:hover .modern-card-btn { background: #e0e0e0; }
+
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+    </style>
+</head>
+<body style="background-color: var(--bg-light);">
+
+    <header class="navbar" id="navbar">
+        <div class="logo"><a href="index.html"><img src="assets/img/logog.png" alt="Genius Hub" class="logo-img"></a></div>
+        <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        <nav class="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html#home" class="nav-item">Home</a></li>
+                <li><a href="index.html#solucoes" class="nav-item active">Soluções</a></li>
+                <li><a href="index.html#cases" class="nav-item">Cases</a></li>
+                <li><a href="index.html#quem-somos" class="nav-item">Quem Somos</a></li>
+            </ul>
+        </nav>
+        <div class="header-spacer"></div>
+    </header>
+
+    <section class="section-light" style="padding-top: 100px; min-height: 80vh;">
+        <div class="container">
+            
+            <div class="breadcrumbs" style="font-family: var(--font-main); font-size: 0.9rem; color: #888; margin-bottom: 25px; font-weight: 600;">
+                <a href="index.html#home" style="color: #888; text-decoration: none;">Home</a> <span style="margin: 0 8px;">/</span>
+                <a href="index.html#solucoes" style="color: #888; text-decoration: none;">Soluções</a> <span style="margin: 0 8px;">/</span>
+                <strong id="breadcrumb-categoria" style="color: var(--text-dark); text-transform: uppercase;">Carregando...</strong>
+            </div>
+
+            <h2 id="titulo-categoria" style="font-size: 2.2rem; font-weight: 900; color: var(--text-dark); margin-bottom: 40px; text-transform: uppercase;">Carregando...</h2>
+            
+            <div class="grid-cards" id="portfolio-grid"></div>
+
+            <div id="paginacao" class="pagination" style="margin-top: 50px;"></div>
+
+            <div style="margin-top: 50px; border-top: 1px solid #eaeaea; padding-top: 30px;">
+                <a href="index.html#solucoes" style="background: var(--text-dark); color: var(--text-light); padding: 12px 24px; border-radius: 30px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    &larr; Voltar para Soluções
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Original Intacto -->
+    <footer id="contato" class="footer section-dark" style="padding-bottom: 50px; padding-top: 50px; position: relative; z-index: 5;">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="assets/img/logog.png" alt="Genius Hub" class="footer-logo">
+                    <p>Transformamos eventos estáticos em experiências imersivas inesquecíveis através da tecnologia e programação.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Navegação</h3>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#solucoes">Soluções</a></li>
+                        <li><a href="index.html#cases">Nossos Clientes</a></li>
+                        <li><a href="index.html#quem-somos">Quem Somos</a></li>
+                        <li><a href="index.html#faq">Dúvidas Frequentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Fale Conosco</h3>
+                    <ul>
+                        <li><span>WhatsApp:</span> <a href="https://wa.me/5583920036455">(83) 92003-6455</a></li>
+                        <li><span>E-mail:</span> <a href="mailto:geniuseventos4@gmail.com">geniuseventos4@gmail.com</a></li>
+                        <li><span>Sede:</span> João Pessoa - PB, Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Genius Hub. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="categoria.js"></script>
+</body>
+</html>

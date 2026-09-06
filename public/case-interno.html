@@ -3,130 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Projeto | Genius Hub</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Detalhes da Solução | Genius Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-</head>
-<body style="padding-top: 100px;">
+    <style>
+        /* TOPO: Imagem e Informações */
+        .product-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; margin-bottom: 20px; }
+        
+        .mobile-header-block { display: none; }
+        .desktop-header-block { display: block; margin-bottom: 25px; }
+        
+        .product-title { font-size: 2.5rem; font-weight: 900; color: var(--text-dark); margin-bottom: 12px; text-transform: uppercase; line-height: 1.1; }
+        .product-desc { font-size: 1.05rem; color: #555; line-height: 1.6; font-weight: 500; margin: 0; }
 
-    <!-- HEADER -->
-    <header class="navbar" style="background: var(--bg-dark);">
-        <div class="logo">
-            <a href="index.html"><img src="assets/img/logog.png" alt="Genius Hub" class="logo-img"></a>
-        </div>
+        .hero-gallery { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; }
+        .hero-gallery .main-img { width: 100%; max-width: 550px; border-radius: 16px; object-fit: cover; aspect-ratio: 4/3; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: opacity 0.2s; }
         
-        <!-- Menu Hambúrguer -->
-        <div class="menu-toggle" id="mobile-menu">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
+        .hero-thumbnails-wrapper { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 550px; margin-top: 5px; }
+        .thumb-nav { background: #111; color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: 0.3s; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .thumb-nav:hover { background: #444; transform: scale(1.05); }
         
+        .hero-thumbnails { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 4px 0; justify-content: center; width: 100%; }
+        .hero-thumbnails::-webkit-scrollbar { display: none; }
+        .hero-thumbnails img { flex-shrink: 0; width: 65px; height: 65px; border-radius: 8px; object-fit: cover; cursor: pointer; opacity: 0.5; transition: 0.3s; border: 2px solid transparent; }
+        .hero-thumbnails img:hover, .hero-thumbnails img.active { opacity: 1; border-color: var(--text-dark); transform: scale(1.05); }
+
+        .benefits-container { margin-bottom: 25px; }
+        .check-list { list-style: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 15px; margin: 0; padding: 0; }
+        .check-list li { display: flex; gap: 8px; align-items: center; font-size: 0.95rem; color: #222; font-weight: 600; background: #f8f9fa; padding: 8px 16px; border-radius: 8px; border: 1px solid #eee; }
+        .check-icon { flex-shrink: 0; color: #10b981; display: flex; align-items: center; justify-content: center; }
+
+        .tags-container { margin-bottom: 35px; }
+        .tags-label { font-size: 0.8rem; font-weight: 900; color: #888; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
+        .plataformas-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .plataformas-tags span { background: #fff; border: 1px solid #ddd; color: #444; padding: 6px 14px; border-radius: 8px; font-family: var(--font-code); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+
+        .btn-container { width: 100%; display: flex; justify-content: flex-start; }
+        .btn-container a { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 40px; border-radius: 30px; font-size: 1.1rem; text-decoration: none; width: 100%; max-width: 400px; font-weight: 800; transition: transform 0.3s, box-shadow 0.3s; }
+        .btn-container a:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+
+        /* GRADE BENTO (DARK + ESTRELAS) */
+        .bento-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+        .bento-card.full-width { grid-column: 1 / -1; }
+        
+        .bento-card { 
+            background: rgba(30, 30, 30, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(10px); 
+            border-radius: 20px; 
+            padding: 30px; 
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+        }
+        .bento-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6); 
+            border-color: rgba(255, 255, 255, 0.4); 
+        }
+        
+        .bento-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        
+        .bento-icon {
+            width: 45px; height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bento-header h3 { color: #ffffff; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 0.5px; } 
+        
+        .bento-list { list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; }
+        .bento-list li { color: #a0a0a0; font-size: 0.95rem; line-height: 1.6; font-weight: 500; display: flex; align-items: flex-start; gap: 10px; text-align: justify; } 
+        .bento-list li span { flex: 1; }
+
+        /* UPSELL CENTRALIZADO */
+        .upsell-section { 
+            margin-top: 0px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+        }
+        .upsell-section h2 { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; color: var(--text-dark); }
+        .upsell-section > p { font-size: 1.15rem; color: #555; margin-bottom: 40px; font-weight: 500; }
+        
+        .modern-card { background: #050505; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; width: 100%; max-width: 350px; text-align: left; }
+        .modern-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .modern-card-img { width: 100%; height: 200px; object-fit: cover; background: #222; }
+        .modern-card-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .modern-card-tag { color: #3b82f6; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; font-family: var(--font-code); }
+        .modern-card-title { color: #ffffff; font-size: 1.3rem; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; line-height: 1.2;}
+        .modern-card-desc { color: #a0a0a0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
+        .modern-card-btn { background: #ffffff; color: #050505; padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 800; width: fit-content; transition: background 0.3s; }
+        .modern-card:hover .modern-card-btn { background: #e0e0e0; }
+
+        @media (max-width: 992px) { .bento-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { 
+            .product-hero { display: flex; flex-direction: column; gap: 25px; } 
+            .bento-row { grid-template-columns: 1fr; } 
+            .mobile-header-block { display: block; text-align: center; }
+            .desktop-header-block { display: none; }
+            .product-title { font-size: 2rem; margin-bottom: 10px; }
+            
+            /* BOTÃO 100% DE LARGURA E CENTRALIZADO NO MOBILE (FORÇADO) */
+            .btn-container { width: 100% !important; display: flex !important; justify-content: center !important; padding: 0 !important; }
+            .btn-container a#btn-whatsapp-produto { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; margin: 0 auto !important; }
+            
+            .benefits-container { text-align: center; }
+            .check-list { justify-content: center; }
+            .tags-container { text-align: center; }
+            .plataformas-tags { justify-content: center; }
+            .hero-thumbnails-wrapper { justify-content: center; }
+
+            .upsell-section { margin-top: 15px; }
+            .upsell-section h2 { font-size: 1.6rem; }
+            .upsell-section > p { font-size: 1rem; margin-bottom: 30px; }
+        }
+    </style>
+</head>
+<body style="background-color: var(--bg-light);">
+
+    <header class="navbar" id="navbar">
+        <div class="logo"><a href="index.html"><img src="assets/img/logog.png" alt="Genius Hub" class="logo-img"></a></div>
+        <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
         <nav class="nav-menu">
             <ul class="nav-links">
                 <li><a href="index.html#home" class="nav-item">Home</a></li>
-                <li><a href="index.html#solucoes" class="nav-item">Soluções</a></li>
+                <li><a href="index.html#solucoes" class="nav-item active">Soluções</a></li>
                 <li><a href="index.html#cases" class="nav-item">Cases</a></li>
+                <li><a href="index.html#quem-somos" class="nav-item">Quem Somos</a></li>
             </ul>
         </nav>
         <div class="header-spacer"></div>
     </header>
 
-    <!-- CONTEÚDO DO PROJETO -->
-    <section class="section-light" style="min-height: 80vh;">
+    <section class="section-light" style="padding-top: 20px; padding-bottom: 50px;">
         <div class="container">
             
-            <div class="case-grid">
-                <div class="case-imagem reveal delay-1">
-                    <img id="case-img" src="" alt="Imagem do Projeto" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none;">
-                </div>
+            <div class="breadcrumbs" style="font-family: var(--font-main); font-size: 0.85rem; color: #111; font-weight: 700; margin-bottom: 25px; padding-top: 20px;">
+                <a href="index.html#home" style="color: #111; text-decoration: none;">Home</a> <span style="margin: 0 8px;">/</span>
+                <a href="index.html#solucoes" style="color: #111; text-decoration: none;">Soluções</a> <span style="margin: 0 8px;">/</span>
+                <a href="#" id="breadcrumb-categoria" style="color: #111; text-decoration: none; display: none;">Categoria</a>
+                <span id="breadcrumb-separador" style="margin: 0 8px; display: none;">/</span>
+                <strong id="breadcrumb-titulo" style="text-transform: capitalize;">Carregando...</strong>
+            </div>
+
+            <div class="product-hero">
                 
-                <div class="case-info reveal delay-2">
-                    <h2 id="case-titulo" style="font-size: 2.5rem; margin-bottom: 20px; text-transform: uppercase;">Carregando...</h2>
-                    <p id="case-desc" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;"></p>
-                    
-                    <h3 style="margin-bottom: 15px;" id="case-tag-title" style="display: none;">Ideal para:</h3>
-                    <ul id="case-tags" style="list-style: none; display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px;">
-                    </ul>
+                <div class="mobile-header-block">
+                    <h1 id="case-titulo-mobile" class="product-title">Carregando...</h1>
+                    <p id="case-desc-mobile" class="product-desc">Aguarde...</p>
+                </div>
 
-                    <a href="#" target="_blank" class="btn-dark" id="case-btn" style="display: none;">Solicitar Orçamento</a>
+                <div class="hero-gallery">
+                    <img id="case-img-main" src="" alt="Imagem Principal" class="main-img">
+                    <div class="hero-thumbnails-wrapper" id="thumbs-wrapper" style="display: none;">
+                        <button id="gal-prev" class="thumb-nav">&lt;</button>
+                        <div class="hero-thumbnails" id="gallery-thumbs"></div>
+                        <button id="gal-next" class="thumb-nav">&gt;</button>
+                    </div>
+                </div>
+
+                <div class="case-info">
+                    <div class="desktop-header-block">
+                        <h1 id="case-titulo" class="product-title">Carregando...</h1>
+                        <p id="case-desc" class="product-desc">Aguarde...</p>
+                    </div>
+                    
+                    <div class="benefits-container" id="box-beneficios-topo" style="display: none;">
+                        <ul id="case-beneficios" class="check-list"></ul>
+                    </div>
+
+                    <div id="box-tags" class="tags-container" style="display: none;">
+                        <div class="tags-label">Compatibilidade</div>
+                        <div id="case-tags" class="plataformas-tags"></div>
+                    </div>
+                    
+                    <div class="btn-container">
+                        <a id="btn-whatsapp-produto" href="https://wa.me/5583920036455" target="_blank" class="btn-dark">
+                            <span>Fale Conosco</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-
-            <!-- Botão Voltar -->
-            <div style="text-align: right; margin-top: 60px;" class="reveal delay-3">
-                <a href="javascript:history.back()" class="btn-primary">← Voltar</a>
-            </div>
-
         </div>
     </section>
 
-    <!-- BOTÃO WHATSAPP FIXO -->
+    <!-- GRADE BENTO BOX (DARK + ESTRELAS) -->
+    <section class="section-dark curve-top" style="padding-bottom: 80px;">
+        <div class="container">
+            <div class="bento-row">
+                
+                <div class="bento-card full-width" id="box-como-funciona" style="display: none;">
+                    <div class="bento-header">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                        </div>
+                        <h3>Como Funciona</h3>
+                    </div>
+                    <ul id="case-como-funciona" class="bento-list"></ul>
+                </div>
+
+                <div class="bento-card" id="box-oque-ganha" style="display: none;">
+                    <div class="bento-header">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <h3>O que você ganha?</h3>
+                    </div>
+                    <ul id="case-oque-ganha" class="bento-list"></ul>
+                </div>
+
+                <div class="bento-card" id="box-personalizacao" style="display: none;">
+                    <div class="bento-header">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                        </div>
+                        <h3>Personalização e Marca</h3>
+                    </div>
+                    <ul id="case-personalizacao" class="bento-list"></ul>
+                </div>
+
+                <div class="bento-card" id="box-entrega" style="display: none;">
+                    <div class="bento-header">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        </div>
+                        <h3>A Entrega</h3>
+                    </div>
+                    <ul id="case-entrega" class="bento-list"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UPSELL CENTRALIZADO -->
+    <section class="section-light curve-top-reverse" style="padding-top: 10px; padding-bottom: 60px; z-index: 4; position: relative;">
+        <div class="container">
+            <div id="upsell-container" class="upsell-section" style="display: none;">
+                <h2>FERRAMENTAS QUE ELEVAM O NÍVEL</h2>
+                <p>Adicione esta solução sugerida ao seu combo.</p>
+                <a href="#" id="upsell-link" class="modern-card">
+                    <img id="upsell-img" src="" alt="Solução Extra" class="modern-card-img">
+                    <div class="modern-card-body">
+                        <div id="upsell-tag" class="modern-card-tag">* RECOMENDADO</div>
+                        <h4 id="upsell-titulo" class="modern-card-title">Carregando...</h4>
+                        <p id="upsell-desc" class="modern-card-desc">...</p>
+                        <div class="modern-card-btn">Ver Detalhes</div>
+                    </div>
+                </a>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; border-top: 1px solid #eaeaea; padding-top: 30px; margin-top: 40px;">
+                <a href="#" id="btn-voltar" style="background: #111; color: #fff; padding: 12px 40px; border-radius: 30px; font-weight: 700; text-decoration: none; font-size: 1rem; transition: background 0.3s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#111'">
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contato" class="footer section-dark" style="padding-bottom: 50px; padding-top: 50px; position: relative; z-index: 5;">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="assets/img/logog.png" alt="Genius Hub" class="footer-logo">
+                    <p>Transformamos eventos estáticos em experiências imersivas inesquecíveis através da tecnologia e programação.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Navegação</h3>
+                    <ul>
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#solucoes">Soluções</a></li>
+                        <li><a href="index.html#cases">Nossos Clientes</a></li>
+                        <li><a href="index.html#quem-somos">Quem Somos</a></li>
+                        <li><a href="index.html#faq">Dúvidas Frequentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Fale Conosco</h3>
+                    <ul>
+                        <li><span>WhatsApp:</span> <a href="https://wa.me/5583920036455">(83) 92003-6455</a></li>
+                        <li><span>E-mail:</span> <a href="mailto:geniuseventos4@gmail.com">geniuseventos4@gmail.com</a></li>
+                        <li><span>Sede:</span> João Pessoa - PB, Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Genius Hub. Todos os direitos reservados.</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <a href="https://wa.me/5583920036455?text=Olá! Gostaria de saber mais sobre as soluções do Genius Hub." target="_blank" class="whatsapp-float" aria-label="Fale conosco pelo WhatsApp">
-        <svg viewBox="0 0 448 512" width="32" height="32" fill="white">
-            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 413.6c-33.6 0-66.5-9-95.4-26l-6.8-4-71 18.6 18.9-69.2-4.4-7C45.2 291 33 258 33 223.9 33 118.7 118.7 33 223.9 33c51 0 98.9 19.9 134.9 55.9s55.9 83.9 55.9 134.9c0 105.2-85.7 190.9-190.8 190.8zm103.8-142.3c-5.7-2.8-33.8-16.7-39-18.6-5.2-1.9-9-2.8-12.8 2.8-3.8 5.7-14.7 18.6-18 22.4-3.3 3.8-6.6 4.3-12.3 1.4-5.7-2.8-24.1-8.9-45.9-28.3-17-15.1-28.5-33.8-31.8-39.5-3.3-5.7-.4-8.8 2.5-11.6 2.6-2.6 5.7-6.6 8.5-9.9 2.8-3.3 3.8-5.7 5.7-9.5 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.9-17.6-42.3-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-10 1.4-15.2 7.1-5.2 5.7-19.9 19.4-19.9 47.4 0 28 20.4 55.1 23.2 58.8 2.8 3.8 40 61.1 96.9 85.7 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.8-13.8 38.6-27.1 4.7-13.3 4.7-24.6 3.3-27.1-1.4-2.6-5.2-4.1-10.9-6.9z"/>
-        </svg>
+        <svg viewBox="0 0 448 512" width="32" height="32" fill="white"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 413.6c-33.6 0-66.5-9-95.4-26l-6.8-4-71 18.6 18.9-69.2-4.4-7C45.2 291 33 258 33 223.9 33 118.7 118.7 33 223.9 33c51 0 98.9 19.9 134.9 55.9s55.9 83.9 55.9 134.9c0 105.2-85.7 190.9-190.8 190.8zm103.8-142.3c-5.7-2.8-33.8-16.7-39-18.6-5.2-1.9-9-2.8-12.8 2.8-3.8 5.7-14.7 18.6-18 22.4-3.3 3.8-6.6 4.3-12.3 1.4-5.7-2.8-24.1-8.9-45.9-28.3-17-15.1-28.5-33.8-31.8-39.5-3.3-5.7-.4-8.8 2.5-11.6 2.6-2.6 5.7-6.6 8.5-9.9 2.8-3.3 3.8-5.7 5.7-9.5 1.9-3.8.9-7.1-.5-9.9-1.4-2.8-12.8-30.9-17.6-42.3-4.6-11.1-9.3-9.6-12.8-9.8-3.3-.2-7.1-.2-10.9-.2-3.8 0-10 1.4-15.2 7.1-5.2 5.7-19.9 19.4-19.9 47.4 0 28 20.4 55.1 23.2 58.8 2.8 3.8 40 61.1 96.9 85.7 13.5 5.8 24 9.3 32.2 11.9 13.6 4.3 26 3.7 35.8 2.2 11-1.7 33.8-13.8 38.6-27.1 4.7-13.3 4.7-24.6 3.3-27.1-1.4-2.6-5.2-4.1-10.9-6.9z"/></svg>
     </a>
 
-    <!-- Supabase e Script da Página -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="main.js"></script>
-    <script>
-        const supabaseUrl = 'https://dwytzdsadnhbtgvlfswi.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eXR6ZHNhZG5oYnRndmxmc3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0OTIzNTEsImV4cCI6MjEwNDA2ODM1MX0.s6MBWZRgo5lwf_VYKr2rN4eGqlbXC3VKMzUPb6TseTU';
-        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const itemId = urlParams.get('item'); 
-        const projetoId = urlParams.get('projeto'); 
-        const idBuscado = itemId || projetoId;
-
-        async function carregarDetalhes() {
-            if (!idBuscado) { mostrarErro(); return; }
-
-            try {
-                const { data, error } = await supabaseClient.from('portfolio').select('*').eq('id', idBuscado).single(); 
-
-                if (error || !data) { mostrarErro(); return; }
-
-                document.getElementById('case-titulo').innerText = data.titulo;
-                document.getElementById('case-desc').innerText = data.descricao;
-                
-                const imgElement = document.getElementById('case-img');
-                imgElement.src = data.imagem;
-                imgElement.alt = data.titulo;
-                imgElement.style.display = 'block';
-
-                const tagsContainer = document.getElementById('case-tags');
-                tagsContainer.innerHTML = ''; 
-                if (data.tags && Array.isArray(data.tags)) {
-                    data.tags.forEach(tag => {
-                        const li = document.createElement('li');
-                        li.className = 'tag';
-                        li.innerText = tag;
-                        tagsContainer.appendChild(li);
-                    });
-                    document.getElementById('case-tag-title').style.display = 'block';
-                }
-
-                const btnOrcamento = document.getElementById('case-btn');
-                const mensagem = `Olá! Gostaria de solicitar um orçamento para o projeto: ${data.titulo}.`;
-                btnOrcamento.href = `https://wa.me/5583920036455?text=${encodeURIComponent(mensagem)}`;
-                btnOrcamento.style.display = 'inline-block';
-                
-            } catch (erro) {
-                mostrarErro();
-            }
-        }
-
-        function mostrarErro() {
-            document.getElementById('case-titulo').innerText = "Conteúdo não encontrado";
-            document.getElementById('case-desc').innerText = "O projeto ou solução que você procura não está disponível ou o link está incorreto.";
-        }
-
-        carregarDetalhes();
-    </script>
+    <script src="case.js"></script>
 </body>
 </html>
