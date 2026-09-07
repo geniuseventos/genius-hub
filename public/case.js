@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('case-desc').innerText = data.descricao || '';
             document.getElementById('case-desc-mobile').innerText = data.descricao || '';
             
+            // CORREÇÃO SEO: Título da Aba do Navegador Dinâmico
+            document.title = `${data.titulo} | Genius Hub - Ativações e Gamificação`;
+
             const btnWhats = document.getElementById('btn-whatsapp-produto');
             if (btnWhats) btnWhats.href = `https://wa.me/5583920036455?text=${encodeURIComponent(`Olá! Gostaria de saber mais sobre: ${data.titulo}`)}`;
 
@@ -35,10 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (imagensGaleria.length > 0) {
                 imgMain.src = imagensGaleria[0];
+                // CORREÇÃO SEO: Adicionando a tag Alt dinamicamente para o Google Imagens
+                imgMain.alt = data.titulo;
+                
                 if (imagensGaleria.length > 1) {
                     wrapper.style.display = 'flex';
                     thumbsContainer.innerHTML = imagensGaleria.map((imgUrl, index) => 
-                        `<img src="${imgUrl}" class="thumb-img ${index === 0 ? 'active' : ''}" data-index="${index}">`
+                        `<img src="${imgUrl}" class="thumb-img ${index === 0 ? 'active' : ''}" data-index="${index}" alt="Imagem ${index + 1} de ${data.titulo}">`
                     ).join('');
 
                     let currentIndex = 0;
@@ -122,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (box) box.style.display = 'flex';
                 const linhas = textoRaw.split('\n').filter(l => l.trim() !== '');
                 
-                // Mudei a cor de #111 para #ffffff
                 ul.innerHTML = linhas.map(line => `<li><svg style="flex-shrink: 0; color: #ffffff; margin-top: 2px;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg> <span>${line}</span></li>`).join('');
             }
 
