@@ -192,6 +192,62 @@ h2 {
 .nav-links a.active { border-bottom: 2px solid var(--text-light); }
 
 /* ========================================= */
+/* MENU DROPDOWN (SOLUÇÕES)                  */
+/* ========================================= */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -20px;
+    background-color: rgba(5, 5, 5, 0.95);
+    min-width: 240px;
+    box-shadow: 0px 15px 30px 0px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    padding: 10px 0;
+    z-index: 1001;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content li {
+    list-style: none;
+}
+
+.dropdown-content li a {
+    color: var(--text-light);
+    padding: 12px 25px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-bottom: none;
+    transition: background 0.3s ease, padding-left 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-content li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 30px;
+    color: #fff;
+    border-bottom: none;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    animation: fadeInDropdown 0.3s ease;
+}
+
+@keyframes fadeInDropdown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================= */
 /* MENU HAMBÚRGUER MOBILE                   */
 /* ========================================= */
 
@@ -267,10 +323,6 @@ h2 {
 .categoria-footer .explore { font-weight: 800; font-size: 0.8rem; font-family: var(--font-code); color: var(--text-light); transition: transform 0.3s ease; text-transform: uppercase; }
 .card-categoria:hover .explore { transform: translateX(5px); }
 
-#btn-voltar-categorias:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-}
-
 /* ========================================= */
 /* GRID E CARDS DE SOLUÇÕES                  */
 /* ========================================= */
@@ -333,7 +385,7 @@ h2 {
 @keyframes shine-tarja { 0% { left: -100%; } 100% { left: 200%; } }
 
 /* ========================================= */
-/* FAQ (NO TEMA CLARO)                       */
+/* FAQ E FILTROS DE CATEGORIA                */
 /* ========================================= */
 
 .faq-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
@@ -354,6 +406,28 @@ h2 {
 .faq-question::after { content: '+'; font-size: 1.8rem; color: var(--text-dark); transition: transform 0.3s ease; line-height: 1; }
 .faq-item[open] .faq-question::after { content: '-'; transform: rotate(180deg); color: #e63946; }
 .faq-answer { padding: 0 30px 25px 30px; color: #555555; font-size: 1rem; line-height: 1.7; animation: fadeInDown 0.4s ease-out; }
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilo para Filtros da página de Catálogo */
+.filtros-container {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap;
+}
+
+.filtros-label {
+    font-family: var(--font-code); font-size: 1.2rem; font-weight: 900; color: var(--text-dark); text-transform: uppercase; margin-right: 10px;
+}
+
+.filter-btn {
+    background: transparent; border: 2px solid var(--text-dark); color: var(--text-dark); padding: 8px 20px; border-radius: 8px;
+    font-family: var(--font-code); font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+}
+
+.filter-btn:hover { background: rgba(0, 0, 0, 0.05); }
+.filter-btn.active { background: var(--text-dark); color: var(--text-light); }
 
 /* ========================================= */
 /* CARROSSEL E VITRINE COM GRID              */
@@ -409,10 +483,8 @@ h2 {
 .case-card h3 { position: relative; z-index: 2; font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
 
 /* ========================================= */
-/* VITRINE DE SOLUÇÕES (DARK CARD EM LIGHT)  */
+/* MODERN CARD (USADO NA VITRINE E CATÁLOGO) */
 /* ========================================= */
-
-.vitrine-track { gap: 25px; }
 
 .modern-card { background: #050505; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; min-width: 320px; flex: 0 0 320px; scroll-snap-align: center; }
 .modern-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
@@ -423,6 +495,9 @@ h2 {
 .modern-card-desc { color: #a0a0a0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
 .modern-card-btn { background: #ffffff; color: #050505; padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 800; width: fit-content; transition: background 0.3s; margin-top: auto; }
 .modern-card:hover .modern-card-btn { background: #e0e0e0; }
+
+/* Adicionado para remover os bloqueios flex quando o card está dentro do grid do catálogo e vitrine mobile */
+.grid-cards .modern-card { min-width: unset; flex: unset; height: 100%; }
 
 /* ========================================= */
 /* CURVAS DESKTOP                            */
@@ -447,6 +522,12 @@ h2 {
     .nav-menu.active { right: 0; }
     .nav-links { flex-direction: column; gap: 30px; text-align: center; }
 
+    /* Ajuste do Dropdown Mobile/Tablet */
+    .dropdown-content { position: static; background-color: transparent; box-shadow: none; border: none; min-width: auto; text-align: center; display: none; padding: 10px 0 0 0; }
+    .dropdown.active .dropdown-content { display: block; }
+    .dropdown-content li a { padding: 10px; font-size: 0.85rem; color: #a0a0a0; }
+    .dropdown-content li a:hover { padding-left: 10px; color: var(--text-light); background-color: transparent; }
+
     .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
     .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
     .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
@@ -461,7 +542,6 @@ h2 {
 
 @media (max-width: 768px) {
 
-    /* FORÇAR TODOS OS BOTÕES A LARGURA MÁXIMA NO MOBILE */
     .btn-primary, .btn-secondary, .btn-dark {
         width: 100% !important; max-width: 100% !important; min-width: 100% !important;
         display: flex !important; box-sizing: border-box !important;
@@ -471,28 +551,59 @@ h2 {
     .hero-content h2 { font-size: 2rem; }
     .hero-video { height: 250px; }
 
-    /* Suavizar curva no Mobile */
     .curve-top, .curve-top-reverse, [style*="clip-path"] { clip-path: ellipse(350% 100% at 50% 100%) !important; padding-top: 80px; }
     .hero.section-light[style*="padding"] { padding-top: 30px !important; padding-bottom: 20px !important; }
     .section-dark[style*="clip-path"] { padding-top: 60px !important; margin-top: -20px !important; }
 
-    /* Categorias */
     .grid-categorias { grid-template-columns: 1fr; gap: 20px; }
     .card-categoria { padding: 25px; }
 
-    /* Vitrine Mobile - Grid 2x2 */
+    /* Filtros Mobile */
+    .filtros-container { justify-content: center; gap: 10px; margin-bottom: 30px; }
+    .filtros-label { width: 100%; text-align: center; margin-right: 0; margin-bottom: 5px; }
+    .filter-btn { padding: 6px 12px; font-size: 0.75rem; }
+
+    /* Vitrine & Grid Catálogo Mobile - Grid 2x2 Universal */
     .vitrine-wrapper { padding: 0; }
     .vitrine-wrapper .prev-btn, .vitrine-wrapper .next-btn { display: none !important; }
-    .vitrine-track { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; padding: 0 10px !important; }
-    .vitrine-track .modern-card { min-width: 0 !important; flex: none !important; height: auto !important; }
-    .vitrine-track .modern-card:nth-child(n+5) { display: none !important; }
-    .vitrine-track .modern-card-img { height: 100px !important; }
-    .vitrine-track .modern-card-body { padding: 15px !important; }
-    .vitrine-track .modern-card-tag { font-size: 0.65rem !important; margin-bottom: 6px !important; }
-    .vitrine-track .modern-card-title { font-size: 0.76rem !important; margin-bottom: 8px !important; }
     
-    /* Mostrar Preview da Descrição em 2 linhas */
-    .vitrine-track .modern-card-desc { 
+    .vitrine-track, .grid-cards { 
+        display: grid !important; 
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important; 
+        padding: 0 10px !important; 
+    }
+    
+    .vitrine-track .modern-card, .grid-cards .modern-card { 
+        min-width: 0 !important; 
+        flex: none !important; 
+        height: 100% !important; 
+    }
+    
+    .vitrine-track .modern-card:nth-child(n+5) { display: none !important; }
+    
+    .vitrine-track .modern-card-img, .grid-cards .modern-card-img { 
+        height: 100px !important; 
+    }
+    
+    .vitrine-track .modern-card-body, .grid-cards .modern-card-body { 
+        padding: 15px !important; 
+        display: flex !important; 
+        flex-direction: column !important; 
+        height: 100% !important; 
+    }
+    
+    .vitrine-track .modern-card-tag, .grid-cards .modern-card-tag { 
+        font-size: 0.65rem !important; 
+        margin-bottom: 6px !important; 
+    }
+    
+    .vitrine-track .modern-card-title, .grid-cards .modern-card-title { 
+        font-size: 0.76rem !important; 
+        margin-bottom: 8px !important; 
+    }
+    
+    .vitrine-track .modern-card-desc, .grid-cards .modern-card-desc { 
         display: -webkit-box !important; 
         -webkit-line-clamp: 2 !important; 
         -webkit-box-orient: vertical !important;
@@ -502,63 +613,38 @@ h2 {
         color: #a0a0a0 !important;
     }
     
-    .vitrine-track .modern-card-btn { width: 100% !important; padding: 8px !important; font-size: 0.75rem !important; text-align: center !important; border-radius: 8px !important; }
+    .vitrine-track .modern-card-btn, .grid-cards .modern-card-btn { 
+        width: 100% !important; 
+        padding: 8px !important; 
+        font-size: 0.75rem !important; 
+        text-align: center !important; 
+        border-radius: 8px !important; 
+        margin-top: auto !important; 
+    }
 
-    .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
     .card-solucao { border-radius: 12px; }
     .card-img { height: 100px !important; }
 
-    /* Carrossel Clientes */
     .carousel-wrapper { padding: 0 10px; }
     .prev-btn, .next-btn { display: none; }
     .case-card { min-width: 280px; height: 400px; }
 
-    /* Quem Somos */
     .sobre-container { display: flex; flex-direction: column; gap: 30px; }
     .sobre-imagem { order: 1; width: 100%; min-height: 250px; margin-bottom: 10px; }
     .sobre-texto { order: 2; text-align: center; }
     .assinatura { flex-direction: column; text-align: center; margin: 0 auto; gap: 10px; border-left: none; border-top: 4px solid var(--text-light); padding-left: 0; padding-top: 15px; align-items: center; }
     
-    /* Você pensa na ideia - Mobile ajustado */
-    .ideia-interativa { 
-        min-height: 220px !important; 
-        padding: 0 !important; 
-        position: relative !important;
-    }
-
-    .frase-pensa { 
-        position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; 
-        color: var(--text-dark) !important; font-size: 1.45rem !important; text-align: center !important; margin: 0 !important; 
-        width: 100% !important; padding: 0 15px !important; white-space: nowrap !important; 
-    }
-
-    .conteudo-hover { 
-        position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -20%) !important; 
-        opacity: 0 !important; display: flex !important; flex-direction: column !important; align-items: center !important; 
-        width: 100% !important; padding: 0 15px !important;
-    }
-
+    .ideia-interativa { min-height: 220px !important; padding: 0 !important; position: relative !important; }
+    .frase-pensa { position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; color: var(--text-dark) !important; font-size: 1.45rem !important; text-align: center !important; margin: 0 !important; width: 100% !important; padding: 0 15px !important; white-space: nowrap !important; }
+    .conteudo-hover { position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -20%) !important; opacity: 0 !important; display: flex !important; flex-direction: column !important; align-items: center !important; width: 100% !important; padding: 0 15px !important; }
     .frase-constroi { font-size: 1.35rem !important; text-align: center !important; flex-direction: column !important; gap: 8px !important; }
     .destaque-tarja { padding: 5px 15px !important; border-radius: 8px !important; font-size: 1.3rem !important; }
     .btn-hover-reveal { margin-top: 20px !important; }
-
-    /* O toque seguro no mobile */
-    .ideia-interativa:hover .frase-pensa { 
-        transform: translate(-50%, calc(-50% - 65px)) !important; 
-        color: #e0e0e0 !important; 
-    }
-    
-    .ideia-interativa:hover .conteudo-hover { 
-        transform: translate(-50%, calc(-50% + 25px)) !important; 
-        opacity: 1 !important; 
-        pointer-events: auto !important; 
-    }
+    .ideia-interativa:hover .frase-pensa { transform: translate(-50%, calc(-50% - 65px)) !important; color: #e0e0e0 !important; }
+    .ideia-interativa:hover .conteudo-hover { transform: translate(-50%, calc(-50% + 25px)) !important; opacity: 1 !important; pointer-events: auto !important; }
 
     .faq-question { font-size: 1rem; padding: 15px; }
 
-    /* ========================================= */
-    /* PÁGINA INTERNA DO PROJETO                 */
-    /* ========================================= */
     .case-grid { grid-template-columns: 1fr; gap: 30px; }
     #case-titulo { font-size: 1.8rem !important; text-align: center; }
     #case-desc { text-align: center; }

@@ -18,7 +18,6 @@
             </a>
         </div>
         
-        <!-- Menu Hambúrguer -->
         <div class="menu-toggle" id="mobile-menu">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -73,7 +72,6 @@
 
                 <!-- ASSINATURA -->
                 <div class="assinatura-historia" style="display: flex; align-items: center; gap: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; margin-top: 40px;">
-                    <!-- flex-shrink: 0 impede a foto de ficar oval -->
                     <img src="assets/img/fotoeverton.jpg" alt="Éverton José da Costa" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--text-light); flex-shrink: 0;">
                     <div>
                         <h4 style="font-size: 1.5rem; font-weight: 900; color: var(--text-light); text-transform: uppercase; margin-bottom: 5px;">Éverton José da Costa</h4>
@@ -84,7 +82,7 @@
             </div>
             
             <div style="text-align: center; margin-top: 80px;">
-                <a href="index.html" class="btn-primary">Voltar para a Página Inicial</a>
+                <a href="index.html" class="btn-primary btn-center"><span>Voltar para a Página Inicial</span></a>
             </div>
 
         </div>
@@ -129,6 +127,8 @@
         </svg>
     </a>
 
+    <!-- AQUI ESTÁ A CORREÇÃO: CARREGANDO O SUPABASE ANTES DO SEU SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="main.js"></script>
 </body>
 </html>
